@@ -1,0 +1,13 @@
+weapon,outcome,null_mean_Z,null_sd_Z,n_finite_perm,n_nonfinite_perm,n_units,perm_reject_rate,n_perm
+GROUND,part_n_war,2.228,7.3997,2000,0,192,0.312,2000
+MISSILES,part_n_minor,0.8858,1.548,2000,0,192,0.273,2000
+NAVAL,part_n_minor,0.7655,1.5333,2000,0,192,0.255,2000
+GROUND,part_n_extraterritorial,2.393,7.274,2000,0,192,0.3325,2000
+NAVAL,part_n_extraterritorial,1.0092,1.9592,2000,0,192,0.3025,2000
+GROUND,part_n_minor,0.9676,1.5664,2000,0,192,0.3025,2000
+MISSILES,part_n_extraterritorial,1.2683,2.5477,2000,0,192,0.3485,2000
+MISSILES,part_n_war,1.4929,2.4158,2000,0,192,0.405,2000
+NAVAL,part_n_war,0.9053,1.8449,2000,0,192,0.2765,2000
+AIR,part_n_extraterritorial,0.7927,1.4171,2000,0,192,0.2425,2000
+AIR,part_n_minor,0.7784,1.5234,2000,0,192,0.2355,2000
+AIR,part_n_war,0.8256,1.6697,2000,0,192,0.2685,2000

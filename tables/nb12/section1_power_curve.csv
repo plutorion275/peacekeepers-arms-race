@@ -1,0 +1,15 @@
+cell,delta,power,delta_star_80,n_sim
+GROUND×part_n_minor,0.0,0.54,0.0133,300
+GROUND×part_n_minor,0.02,0.93,0.0133,300
+GROUND×part_n_minor,0.05,1.0,0.0133,300
+GROUND×part_n_minor,0.1,1.0,0.0133,300
+GROUND×part_n_minor,0.15,1.0,0.0133,300
+GROUND×part_n_minor,0.2,1.0,0.0133,300
+GROUND×part_n_minor,0.3,1.0,0.0133,300
+MISSILES×part_n_minor,0.0,0.88,0.0,300
+MISSILES×part_n_minor,0.02,0.9933333333333333,0.0,300
+MISSILES×part_n_minor,0.05,1.0,0.0,300
+MISSILES×part_n_minor,0.1,1.0,0.0,300
+MISSILES×part_n_minor,0.15,1.0,0.0,300
+MISSILES×part_n_minor,0.2,1.0,0.0,300
+MISSILES×part_n_minor,0.3,1.0,0.0,300

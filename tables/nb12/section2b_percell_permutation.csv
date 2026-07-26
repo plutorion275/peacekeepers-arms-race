@@ -1,0 +1,13 @@
+weapon,outcome,obs_Z,obs_p,null_mean_Z,null_sd_Z,z_pos,n_exceed,n_finite_perm,n_nonfinite_perm,n_units,p_cell,nominal_sig,q_bh,p_bonf,survives_percell,survives_bh,survives_bonferroni
+GROUND,part_n_war,6.4233,0.0,2.228,7.3997,0.567,83,2000,0,192,0.04198,True,0.2024,0.5038,True,False,False
+MISSILES,part_n_minor,3.6372,0.0001,0.8858,1.548,1.7774,110,2000,0,192,0.05547,True,0.2024,0.6656,False,False,False
+NAVAL,part_n_minor,3.2888,0.0005,0.7655,1.5333,1.6457,122,2000,0,192,0.06147,True,0.2024,0.7376,False,False,False
+GROUND,part_n_extraterritorial,4.9274,0.0,2.393,7.274,0.3484,134,2000,0,192,0.06747,True,0.2024,0.8096,False,False,False
+NAVAL,part_n_extraterritorial,2.0404,0.0207,1.0092,1.9592,0.5263,483,2000,0,192,0.24188,True,0.4783,1.0,False,False,False
+GROUND,part_n_minor,1.8697,0.0308,0.9676,1.5664,0.5759,500,2000,0,192,0.25037,True,0.4783,1.0,False,False,False
+MISSILES,part_n_extraterritorial,1.9412,0.0261,1.2683,2.5477,0.2641,598,2000,0,192,0.29935,True,0.4783,1.0,False,False,False
+MISSILES,part_n_war,2.1771,0.0147,1.4929,2.4158,0.2832,637,2000,0,192,0.31884,True,0.4783,1.0,False,False,False
+NAVAL,part_n_war,0.9263,0.1772,0.9053,1.8449,0.0114,895,2000,0,192,0.44778,False,0.597,1.0,False,False,False
+AIR,part_n_extraterritorial,0.5415,0.2941,0.7927,1.4171,-0.1773,1077,2000,0,192,0.53873,False,0.6465,1.0,False,False,False
+AIR,part_n_minor,0.0518,0.4793,0.7784,1.5234,-0.477,1362,2000,0,192,0.68116,False,0.7221,1.0,False,False,False
+AIR,part_n_war,-0.1129,0.5449,0.8256,1.6697,-0.5621,1444,2000,0,192,0.72214,False,0.7221,1.0,False,False,False
