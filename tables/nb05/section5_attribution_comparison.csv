@@ -1,0 +1,7 @@
+Attribution,Outcome,Outcome_pair,coef,SE,p,N
+participation,part_n_war,part_n_war ↔ acd_n_war,0.30259299334009093,0.14491116985002175,0.03684000356787731,4896
+location,acd_n_war,part_n_war ↔ acd_n_war,0.4127251228990321,0.09420497127757464,1.2062971808113332e-05,4896
+participation,part_n_minor,part_n_minor ↔ acd_n_minor,0.5391559569699179,0.17263831785242287,0.0018008243242397803,4896
+location,acd_n_minor,part_n_minor ↔ acd_n_minor,0.3758605928448467,0.11950069974720087,0.0016697502821301224,4896
+participation,war_minor_ratio,war_minor_ratio ↔ war_minor_ratio_loc,0.23409537294045663,0.22302146875803056,0.2940281076751754,1846
+location,war_minor_ratio_loc,war_minor_ratio ↔ war_minor_ratio_loc,1.1478016367678947,0.3023210442927614,0.00015736879630745548,947

@@ -1,0 +1,7 @@
+MTS,quantity,β,p,sig,N
+mts_pca_3feat,mts × polyarchy interaction,-0.955,0.4974,,4896
+mts_pca_3feat,M3 Africa marginal (β_mts),4.534,0.0006,***,4896
+mts_milex,mts × polyarchy interaction,0.6981,0.693,,4896
+mts_milex,M3 Africa marginal (β_mts),2.5779,0.1369,,4896
+mts_tiv,mts × polyarchy interaction,0.0533,0.9282,,4809
+mts_tiv,M3 Africa marginal (β_mts),1.3588,0.0051,***,4809

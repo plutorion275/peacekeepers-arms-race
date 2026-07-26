@@ -1,0 +1,13 @@
+MTS,sample,β_interaction,p_interaction,β_NATO_marginal,p_NATO_marginal,N
+mts_pca_3feat,full,-1.3014,0.0265,0.8621,0.0519,4896
+mts_pca_3feat,drop USA,-1.3964,0.0166,0.7734,0.0875,4861
+mts_pca_3feat,drop TUR,-1.2143,0.0381,0.9434,0.0366,4861
+mts_pca_3feat,drop USA+TUR,-1.3094,0.024,0.8544,0.0628,4826
+mts_milex,full,0.2147,0.6343,1.0434,0.2119,4896
+mts_milex,drop USA,0.1462,0.7629,0.9647,0.2727,4861
+mts_milex,drop TUR,0.3608,0.3692,1.1835,0.1438,4861
+mts_milex,drop USA+TUR,0.2945,0.4973,1.1069,0.1949,4826
+mts_tiv,full,-0.3172,0.211,0.3419,0.0649,4809
+mts_tiv,drop USA,-0.2418,0.3284,0.4205,0.0253,4774
+mts_tiv,drop TUR,-0.3463,0.1676,0.307,0.0888,4774
+mts_tiv,drop USA+TUR,-0.27,0.2723,0.3863,0.037,4739

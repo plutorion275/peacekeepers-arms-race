@@ -1,0 +1,8 @@
+Outcome,"MTS: PCA
+(linear FE)","MTS: MILEX
+(linear FE)","MTS: TIV
+(linear FE)","MTS: PCA
+(Poisson FE)"
+part_n_war,+**,+,+,+nan
+part_n_minor,+***,+**,+*,+**
+part_n_extraterritorial,+,+,+,+nan

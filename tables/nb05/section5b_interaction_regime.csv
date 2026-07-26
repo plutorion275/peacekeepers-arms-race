@@ -1,0 +1,7 @@
+Outcome,Term,β,p,sig,N
+part_n_war,mts_pca_3feat,0.697,0.0158,**,5007
+part_n_war,mts_x_vdem,-0.5596,0.5264,,5007
+part_n_minor,mts_pca_3feat,1.6967,0.0183,**,5007
+part_n_minor,mts_x_vdem,0.7752,0.7895,,5007
+part_n_extraterritorial,mts_pca_3feat,0.9048,0.2246,,5007
+part_n_extraterritorial,mts_x_vdem,-0.4847,0.837,,5007

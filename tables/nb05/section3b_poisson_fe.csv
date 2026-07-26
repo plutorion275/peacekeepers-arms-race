@@ -1,0 +1,4 @@
+Outcome,β (Poisson),SE,p,sig,N,Interpretation
+part_n_war,0.8286,0.6691,0.2156,,4896,IRR = exp(β) — multiplicative effect on expected count
+part_n_minor,0.9301,0.4705,0.0481,**,4896,IRR = exp(β) — multiplicative effect on expected count
+part_n_extraterritorial,0.7565,0.5575,0.1748,,4896,IRR = exp(β) — multiplicative effect on expected count

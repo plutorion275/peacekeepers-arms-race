@@ -1,0 +1,5 @@
+MTS Spec,Spearman rho,p-value,n_countries,Interpretation
+mts_milex,0.8469,0.0,159,Strong agreement with CINC
+mts_tiv,0.8292,0.0,175,Strong agreement with CINC
+mts_pca,0.9113,0.0,155,Strong agreement with CINC
+mts_pca_3feat,0.8417,0.0,155,Strong agreement with CINC

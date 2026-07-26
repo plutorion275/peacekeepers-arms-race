@@ -1,0 +1,7 @@
+Bug,Caught Via,Consequence if Missed
+Islamic State fuzzy-matched to Iceland (ISO3 = ISL),NB02 country-resolution spot-check,Iceland's conflict count inflated to 210 — corrupts any per-country result touching Iceland
+SIPRI's TIV query portal silently defaulted to exports regardless of UI selection,Manual audit of raw download against SIPRI's published totals,"mts_tiv would measure arms EXPORTS, not imports — inverts the capability proxy for every exporting country"
+UCDP folds multi-state coalitions into a single gwno_loc code,NB02 Iraq-2003 spot-check (USA/UK/Australia),Coalition members not flagged as extraterritorial participants — undercounts the exact RQ1 outcome being tested
+Historical-state variables aggregated with mean() instead of sum(),Manual review of additive vs. ratio variable handling,Military expenditure / population silently halved for any country touched by a USSR / Yugoslavia / Czechoslovakia-style split
+"mts_tiv used a literal 0.0 for both ""no data"" and ""zero imports""",NB04 distribution / mass-point check,"~5,397 country-years biased toward the bottom of the capability scale"
+"NB06's placebo ""trustworthy"" column was computed AFTER the CSV was saved",NB08 integration testing against the real saved file (this conversation),Every downstream notebook reading the saved CSV either crashes or silently treats all findings as untested

@@ -1,0 +1,15 @@
+spec,Outcome,quantity,β,SE,p,N
+continuous,part_n_minor,marginal β at polyarchy=0.2,1.4648,0.9188,0.1109,5007
+continuous,part_n_minor,marginal β at polyarchy=0.5,1.6973,0.6498,0.009,5007
+continuous,part_n_minor,marginal β at polyarchy=0.8,1.9298,1.2011,0.1081,5007
+continuous,part_n_minor,mts × polyarchy interaction,0.7752,2.8308,0.7842,5007
+dummy,part_n_minor,β autocracy (is_dem=0),1.2041,0.8219,0.143,5007
+dummy,part_n_minor,β democracy (is_dem=1),2.3801,1.071,0.0263,5007
+dummy,part_n_minor,mts × is_democracy,1.176,1.3871,0.3966,5007
+continuous,log_brd,marginal β at polyarchy=0.2,2.2743,0.7554,0.0026,4896
+continuous,log_brd,marginal β at polyarchy=0.5,1.9878,0.5802,0.0006,4896
+continuous,log_brd,marginal β at polyarchy=0.8,1.7013,0.6775,0.012,4896
+continuous,log_brd,mts × polyarchy interaction,-0.955,1.4071,0.4974,4896
+dummy,log_brd,β autocracy (is_dem=0),2.1608,0.7079,0.0023,4896
+dummy,log_brd,β democracy (is_dem=1),1.8531,0.6887,0.0071,4896
+dummy,log_brd,mts × is_democracy,-0.3077,0.7629,0.6867,4896

@@ -1,0 +1,5 @@
+cluster,mts_pca_3feat_mean,mts_milex_mean,part_n_war_mean,part_n_minor_mean,war_minor_ratio_mean,extraterritorial_share_mean,vdem_v2x_polyarchy_mean,conflict_active_pct,log_brd_mean
+0,0.2627,0.521,0.409,0.2984,0.7563,1.5337,0.6223,0.368,0.1396
+1,0.2765,0.5278,0.4394,2.2466,0.1976,0.3262,0.3484,0.8779,5.8978
+2,0.1796,0.3919,0.0074,0.1484,0.0982,0.879,0.4836,0.1,0.517
+3,0.301,0.597,0.4004,1.9721,0.1857,1.2886,0.6843,0.8241,0.2882

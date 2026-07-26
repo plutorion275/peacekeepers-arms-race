@@ -1,0 +1,4 @@
+pair,corr_full,corr_nato,delta
+mts_pca_3feat~mts_milex,0.9329,0.9441,0.0111
+mts_pca_3feat~mts_tiv,0.8813,0.8729,-0.0084
+mts_milex~mts_tiv,0.8075,0.7382,-0.0693

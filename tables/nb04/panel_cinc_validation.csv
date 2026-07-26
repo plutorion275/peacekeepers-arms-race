@@ -1,0 +1,5 @@
+MTS Spec,rho_panel,p-value,n_country_years
+mts_milex,0.8483,0.0,3926
+mts_tiv,0.7825,0.0,3934
+mts_pca,0.896,0.0,3830
+mts_pca_3feat,0.8118,0.0,3830

@@ -1,0 +1,5 @@
+Outcome,quantity,M1,p_M1,M3,p_M3,shrink_M1→M3_%,M2,p_M2
+log_brd,Africa marginal (β_mts),4.9485,0.0002,4.534,0.0006,8.4,,
+log_brd,mts × polyarchy,,,1.1564,0.613,,-0.955,0.4974
+part_n_minor,Africa marginal (β_mts),4.8774,0.0073,3.938,0.0544,19.3,,
+part_n_minor,mts × polyarchy,,,2.6185,0.5069,,0.7752,0.7842

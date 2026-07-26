@@ -1,0 +1,7 @@
+Moderator,Outcome,β_mts_at_mod0,p_mts,β_interaction,p_interaction,β_mts_at_mod1,SE_at_mod1,p_at_mod1,N
+has_major_power_ally,part_n_war,0.9284,0.0052,0.1059,0.8794,1.0344,0.6311,0.1012,3254
+has_major_power_ally,part_n_minor,1.1193,0.0113,0.5637,0.5347,1.683,0.8904,0.0587,3254
+has_major_power_ally,log_brd,2.6649,0.0012,-1.5343,0.1192,1.1306,1.0333,0.2739,3143
+log1p_n_defense_pacts,part_n_war,0.7252,0.0562,0.4435,0.2687,1.1687,0.3501,0.0008,3254
+log1p_n_defense_pacts,part_n_minor,0.3087,0.524,1.6737,0.009,1.9824,0.551,0.0003,3254
+log1p_n_defense_pacts,log_brd,1.8939,0.0493,0.6964,0.5663,2.5902,0.9745,0.0079,3143
