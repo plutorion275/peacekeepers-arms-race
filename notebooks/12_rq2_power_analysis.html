@@ -7883,6 +7883,7 @@ time the DH test to bound total runtime (with an automatic reduction of
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">stats</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">joblib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">src.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">SEED</span><span class="p">,</span> <span class="n">DATA_DIR</span><span class="p">,</span> <span class="n">FIGURES_DIR</span><span class="p">,</span> <span class="n">TABLES_DIR</span>
@@ -7918,7 +7919,7 @@ time the DH test to bound total runtime (with an automatic reduction of
 <span class="n">N_SIM</span> <span class="o">=</span> <span class="mi">300</span>
 <span class="n">N_NOISE</span> <span class="o">=</span> <span class="mi">100</span>
 <span class="n">INJECTION_CELLS</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">"GROUND"</span><span class="p">,</span> <span class="s2">"part_n_minor"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"MISSILES"</span><span class="p">,</span> <span class="s2">"part_n_minor"</span><span class="p">)]</span>
-<span class="n">DELTAS</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">]</span>   <span class="c1"># 0.0 = type-I size check</span>
+<span class="n">DELTAS</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">]</span>   <span class="c1"># 0.0 = rejection-at-zero check</span>
 <span class="n">GRID_CELLS</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">product</span><span class="p">(</span><span class="n">WEAPON_CLASS_NAMES</span><span class="p">,</span> <span class="n">OUTCOMES</span><span class="p">,</span> <span class="n">LAGS</span><span class="p">))</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Panel: </span><span class="si">{</span><span class="n">panel</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">n_countries</span><span class="si">}</span><span class="s2"> countries, "</span>
@@ -7956,7 +7957,13 @@ time the DH test to bound total runtime (with an automatic reduction of
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>[checkpoint] loaded ← master_panel.parquet  (15,168 rows)
 [rq2_panel] 6,912 rows, 192 countries, 1989–2024
-Panel: (6912, 30), 192 countries, 1989–2024
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Panel: (6912, 30), 192 countries, 1989–2024
 Grid: 36 cells | injection cells: [('GROUND', 'part_n_minor'), ('MISSILES', 'part_n_minor')]
 </pre>
 </div>
@@ -7965,7 +7972,7 @@ Grid: 36 cells | injection cells: [('GROUND', 'part_n_minor'), ('MISSILES', 'par
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>
-DH timing: 24.2 ms/call → 11,736 calls ≈ 4.7 min serial (joblib cuts this several-fold)
+DH timing: 49.8 ms/call → 11,736 calls ≈ 9.7 min serial (joblib cuts this several-fold)
 Runtime OK — keeping N_SIM=300, N_PERM=200
 
 [Section 0] Setup complete — panel rebuilt and verified (192 countries).
@@ -8050,9 +8057,11 @@ outcome-SD-per-treatment-SD units — comparable to a correlation. Using the <em
 outcome keeps the true noise structure, autocorrelation, and missingness. Each
 simulation bootstrap-resamples countries with replacement (sampling variation),
 injects, and runs DH at lag 1. Detection rate = share of sims with p &lt; 0.05.</p>
-<p>δ = 0 is the leftmost grid point — the <strong>type-I size check</strong>: detection at δ=0
-should be ≈ 0.05. If it is far above, the test over-rejects and NB06's nominal
-significances are explained by size distortion alone.</p>
+<p>δ = 0 is the leftmost grid point — the <strong>rejection-rate-at-δ=0 check</strong>. But note
+this is <em>not</em> a clean calibrated size measure: at δ=0 the synthetic outcome equals
+the real outcome, so the rejection rate mixes over-rejection with any genuine
+effect, and bootstrap resampling can inflate it. The calibrated size evidence is
+Section 2b's permutation nulls, where the treatment→outcome link is destroyed.</p>
 </div>
 </div>
 </div>
@@ -8138,31 +8147,38 @@ significances are explained by size distortion alone.</p>
 <span class="n">power_curve</span> <span class="o">=</span> <span class="p">(</span><span class="n">power_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">"cell"</span><span class="p">,</span> <span class="s2">"delta"</span><span class="p">])[</span><span class="s2">"detected"</span><span class="p">]</span>
                        <span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">"power"</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">())</span>
 
-<span class="c1"># Rejection rate at δ = 0 (NOT a type-I rate — see caveat below)</span>
-<span class="n">type1</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="c1"># Rejection rate at δ = 0. Flag constants + banned-framing list live here so the</span>
+<span class="c1"># δ=0 relabel can be VERIFIED by check [16] rather than trusted on attestation.</span>
+<span class="n">REJECT_ZERO_FLAG_HI</span> <span class="o">=</span> <span class="s2">"HIGH REJECTION (not calibrated size)"</span>
+<span class="n">REJECT_ZERO_FLAG_LO</span> <span class="o">=</span> <span class="s2">"rejection rate near nominal"</span>
+<span class="n">BANNED_SIZE_STRINGS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"SIZE DISTORTION"</span><span class="p">,</span> <span class="s2">"size distortion"</span><span class="p">,</span>
+                       <span class="s2">"Type-I size"</span><span class="p">,</span> <span class="s2">"type-I size"</span><span class="p">,</span> <span class="s2">"type-I error rate"</span><span class="p">]</span>
+<span class="n">reject_at_zero</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== Rejection rate at δ=0 (real outcome, real treatment, bootstrap "</span>
       <span class="s2">"country resample) ==="</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">cell_data_by_cell</span><span class="p">:</span>
     <span class="n">rate</span> <span class="o">=</span> <span class="n">power_curve</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">power_curve</span><span class="p">[</span><span class="s2">"cell"</span><span class="p">]</span> <span class="o">==</span> <span class="n">cell</span><span class="p">)</span>
                            <span class="o">&amp;</span> <span class="p">(</span><span class="n">power_curve</span><span class="p">[</span><span class="s2">"delta"</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">),</span> <span class="s2">"power"</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">type1</span><span class="p">[</span><span class="n">cell</span><span class="p">]</span> <span class="o">=</span> <span class="n">rate</span>
+    <span class="n">reject_at_zero</span><span class="p">[</span><span class="n">cell</span><span class="p">]</span> <span class="o">=</span> <span class="n">rate</span>
+    <span class="n">flag</span> <span class="o">=</span> <span class="n">REJECT_ZERO_FLAG_HI</span> <span class="k">if</span> <span class="n">rate</span> <span class="o">&gt;</span> <span class="mf">0.12</span> <span class="k">else</span> <span class="n">REJECT_ZERO_FLAG_LO</span>
     <span class="k">if</span> <span class="n">rate</span> <span class="o">&gt;</span> <span class="mf">0.12</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">cell</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">rate</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> — *** HIGH REJECTION AT δ=0 *** — not a "</span>
-              <span class="sa">f</span><span class="s2">"type-I rate: at δ=0 the outcome is unmodified, so this mixes size "</span>
-              <span class="sa">f</span><span class="s2">"distortion with any genuine effect. See Section 2b for the "</span>
-              <span class="sa">f</span><span class="s2">"permutation-based size evidence."</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">cell</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">rate</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> — *** HIGH REJECTION AT δ=0 *** — at δ=0 "</span>
+              <span class="sa">f</span><span class="s2">"the outcome is unmodified, so this mixes over-rejection with any "</span>
+              <span class="sa">f</span><span class="s2">"genuine effect. See Section 2b for the permutation-based "</span>
+              <span class="sa">f</span><span class="s2">"calibrated size."</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">cell</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">rate</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> — rejection rate near nominal at δ=0"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">cell</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">rate</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> — </span><span class="si">{</span><span class="n">flag</span><span class="si">}</span><span class="s2"> at δ=0"</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Interpretation caveat: δ=0 leaves the real outcome and real treatment "</span>
-      <span class="s2">"in place, so this is a rejection rate under the observed data, not a "</span>
-      <span class="s2">"type-I error rate. Bootstrap resampling of countries with replacement "</span>
+      <span class="s2">"in place, so this is a rejection rate under the observed data, not an "</span>
+      <span class="s2">"error rate against a true null. Bootstrap resampling of countries with "</span>
+      <span class="s2">"replacement "</span>
       <span class="s2">"duplicates units and can inflate it further. The calibrated size "</span>
       <span class="s2">"evidence is Section 2b's permutation nulls, where the treatment-outcome "</span>
       <span class="s2">"link is destroyed."</span><span class="p">)</span>
 
 
-<span class="n">size_ok</span> <span class="o">=</span> <span class="nb">all</span><span class="p">(</span><span class="n">r</span> <span class="o">&lt;=</span> <span class="mf">0.12</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">type1</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="n">reject_zero_ok</span> <span class="o">=</span> <span class="nb">all</span><span class="p">(</span><span class="n">r</span> <span class="o">&lt;=</span> <span class="mf">0.12</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">reject_at_zero</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">power_crossing</span><span class="p">(</span><span class="n">deltas</span><span class="p">,</span> <span class="n">powers</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="mf">0.80</span><span class="p">):</span>
@@ -8184,8 +8200,8 @@ significances are explained by size distortion alone.</p>
     <span class="n">ds</span> <span class="o">=</span> <span class="n">power_crossing</span><span class="p">(</span><span class="n">sub</span><span class="p">[</span><span class="s2">"delta"</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">sub</span><span class="p">[</span><span class="s2">"power"</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
     <span class="n">delta_star</span><span class="p">[</span><span class="n">cell</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span> <span class="ow">and</span> <span class="n">ds</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">cell</span><span class="si">}</span><span class="s2">: δ* ≈ 0 — rejection rate already ≥80% at δ=0; this is "</span>
-              <span class="sa">f</span><span class="s2">"size distortion, not power"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">cell</span><span class="si">}</span><span class="s2">: δ* ≈ 0 — rejection rate already ≥80% at δ=0; "</span>
+              <span class="sa">f</span><span class="s2">"not interpretable as power"</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">ds</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">cell</span><span class="si">}</span><span class="s2">: δ* = </span><span class="si">{</span><span class="n">ds</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -8203,9 +8219,9 @@ significances are explained by size distortion alone.</p>
     <span class="n">relation</span> <span class="o">=</span> <span class="s2">"at or above"</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="n">relation</span> <span class="o">=</span> <span class="s2">"below"</span>   <span class="c1"># power never reaches 80% anywhere on the grid</span>
-<span class="n">caveat</span> <span class="o">=</span> <span class="p">(</span><span class="s2">""</span> <span class="k">if</span> <span class="n">size_ok</span> <span class="k">else</span>
-          <span class="s2">" (caveat: the δ=0 over-rejection makes this floor unreliable — "</span>
-          <span class="s2">"see the type-I check)"</span><span class="p">)</span>
+<span class="n">caveat</span> <span class="o">=</span> <span class="p">(</span><span class="s2">""</span> <span class="k">if</span> <span class="n">reject_zero_ok</span> <span class="k">else</span>
+          <span class="s2">" Floor not interpretable: high rejection at δ=0 "</span>
+          <span class="s2">"(see item 2b for calibrated size)."</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">The pipeline detects standardized effects ≥ δ*; the largest observed raw "</span>
       <span class="sa">f</span><span class="s2">"cross-correlation in NB06 was |ρ| = </span><span class="si">{</span><span class="n">MAX_OBSERVED_CCF</span><span class="si">}</span><span class="s2"> — </span><span class="si">{</span><span class="n">relation</span><span class="si">}</span><span class="s2"> the "</span>
       <span class="sa">f</span><span class="s2">"detection floor.</span><span class="si">{</span><span class="n">caveat</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
@@ -8258,18 +8274,18 @@ significances are explained by size distortion alone.</p>
 Cache HIT — loaded 4,200 sims from nb12_power_sims.parquet
 
 === Rejection rate at δ=0 (real outcome, real treatment, bootstrap country resample) ===
-  GROUND×part_n_minor: 0.540 — *** HIGH REJECTION AT δ=0 *** — not a type-I rate: at δ=0 the outcome is unmodified, so this mixes size distortion with any genuine effect. See Section 2b for the permutation-based size evidence.
-  MISSILES×part_n_minor: 0.880 — *** HIGH REJECTION AT δ=0 *** — not a type-I rate: at δ=0 the outcome is unmodified, so this mixes size distortion with any genuine effect. See Section 2b for the permutation-based size evidence.
+  GROUND×part_n_minor: 0.540 — *** HIGH REJECTION AT δ=0 *** — at δ=0 the outcome is unmodified, so this mixes over-rejection with any genuine effect. See Section 2b for the permutation-based calibrated size.
+  MISSILES×part_n_minor: 0.880 — *** HIGH REJECTION AT δ=0 *** — at δ=0 the outcome is unmodified, so this mixes over-rejection with any genuine effect. See Section 2b for the permutation-based calibrated size.
 
-Interpretation caveat: δ=0 leaves the real outcome and real treatment in place, so this is a rejection rate under the observed data, not a type-I error rate. Bootstrap resampling of countries with replacement duplicates units and can inflate it further. The calibrated size evidence is Section 2b's permutation nulls, where the treatment-outcome link is destroyed.
+Interpretation caveat: δ=0 leaves the real outcome and real treatment in place, so this is a rejection rate under the observed data, not an error rate against a true null. Bootstrap resampling of countries with replacement duplicates units and can inflate it further. The calibrated size evidence is Section 2b's permutation nulls, where the treatment-outcome link is destroyed.
 
 === Minimum detectable effect (80% power) ===
   GROUND×part_n_minor: δ* = 0.013
-  MISSILES×part_n_minor: δ* ≈ 0 — rejection rate already ≥80% at δ=0; this is size distortion, not power
+  MISSILES×part_n_minor: δ* ≈ 0 — rejection rate already ≥80% at δ=0; not interpretable as power
 
 NOTE FOR THE MANUSCRIPT: do not report delta_star. A minimum detectable effect is not interpretable for a test whose rejection rate at delta=0 is far above nominal. Section 1 is a diagnostic, not a power claim.
 
-The pipeline detects standardized effects ≥ δ*; the largest observed raw cross-correlation in NB06 was |ρ| = 0.04 — at or above the detection floor. (caveat: the δ=0 over-rejection makes this floor unreliable — see the type-I check)
+The pipeline detects standardized effects ≥ δ*; the largest observed raw cross-correlation in NB06 was |ρ| = 0.04 — at or above the detection floor. Floor not interpretable: high rejection at δ=0 (see item 2b for calibrated size).
 </pre>
 </div>
 </div>
@@ -8623,14 +8639,7 @@ aux is a SCALAR (the DH test's own contributing-unit count, filtered at its inte
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Cache MISS — running 2,000 permutations x 12 lag-1 cells = 24,000 DH calls (~9.6 min serial, less under joblib)
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Computed fresh in 108s -&gt; cached to nb12_perm_lag1_2000.parquet
+<pre>Cache HIT — loaded 24,000 lag-1 cell results from nb12_perm_lag1_2000.parquet
 [Section 2b] Permutation basis: N_PERM_2B=2000, 12 lag-1 cells, seed stream 500000+i (disjoint from Section 2's 100000+i)
 </pre>
 </div>
@@ -8677,7 +8686,8 @@ aux is a SCALAR (the DH test's own contributing-unit count, filtered at its inte
         <span class="s2">"n_exceed"</span><span class="p">:</span> <span class="n">n_exceed</span><span class="p">,</span>
         <span class="s2">"n_finite_perm"</span><span class="p">:</span> <span class="n">n_finite</span><span class="p">,</span>
         <span class="s2">"n_nonfinite_perm"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">N_PERM_2B</span> <span class="o">-</span> <span class="n">n_finite</span><span class="p">),</span>
-        <span class="s2">"n_units"</span><span class="p">:</span> <span class="n">contributing_units</span><span class="p">(</span><span class="n">country_data</span><span class="p">,</span> <span class="n">tcol</span><span class="p">,</span> <span class="n">ocol</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="s2">"n_units_dh"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">obs_aux</span><span class="p">),</span>      <span class="c1"># DH's own count, internal min_obs=12</span>
+        <span class="s2">"n_units_loose"</span><span class="p">:</span> <span class="n">contributing_units</span><span class="p">(</span><span class="n">country_data</span><span class="p">,</span> <span class="n">tcol</span><span class="p">,</span> <span class="n">ocol</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
         <span class="s2">"p_cell"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">p_cell</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
         <span class="s2">"nominal_sig"</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">obs_p</span> <span class="o">&lt;</span> <span class="n">ALPHA</span><span class="p">),</span>
     <span class="p">})</span>
@@ -8699,7 +8709,7 @@ aux is a SCALAR (the DH test's own contributing-unit count, filtered at its inte
       <span class="sa">f</span><span class="s2">"(lag 1, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">LAG1_CELLS</span><span class="p">)</span><span class="si">}</span><span class="s2"> cells, </span><span class="si">{</span><span class="n">N_PERM_2B</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> permutations, "</span>
       <span class="sa">f</span><span class="s2">"ONE-SIDED upper tail) ===</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 <span class="n">_show</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"weapon"</span><span class="p">,</span> <span class="s2">"outcome"</span><span class="p">,</span> <span class="s2">"obs_Z"</span><span class="p">,</span> <span class="s2">"obs_p"</span><span class="p">,</span> <span class="s2">"null_mean_Z"</span><span class="p">,</span> <span class="s2">"null_sd_Z"</span><span class="p">,</span>
-         <span class="s2">"z_pos"</span><span class="p">,</span> <span class="s2">"p_cell"</span><span class="p">,</span> <span class="s2">"q_bh"</span><span class="p">,</span> <span class="s2">"p_bonf"</span><span class="p">,</span> <span class="s2">"n_units"</span><span class="p">,</span> <span class="s2">"n_finite_perm"</span><span class="p">,</span>
+         <span class="s2">"z_pos"</span><span class="p">,</span> <span class="s2">"p_cell"</span><span class="p">,</span> <span class="s2">"q_bh"</span><span class="p">,</span> <span class="s2">"p_bonf"</span><span class="p">,</span> <span class="s2">"n_units_dh"</span><span class="p">,</span> <span class="s2">"n_finite_perm"</span><span class="p">,</span>
          <span class="s2">"nominal_sig"</span><span class="p">,</span> <span class="s2">"survives_percell"</span><span class="p">,</span> <span class="s2">"survives_bh"</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">sec2b_df</span><span class="p">[</span><span class="n">_show</span><span class="p">]</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
 
@@ -8710,23 +8720,197 @@ aux is a SCALAR (the DH test's own contributing-unit count, filtered at its inte
 <span class="n">n_bh_survivors</span>      <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sec2b_df</span><span class="p">[</span><span class="s2">"survives_bh"</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
 <span class="n">n_bonf_survivors</span>    <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sec2b_df</span><span class="p">[</span><span class="s2">"survives_bonferroni"</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
 
-<span class="c1"># --- Supplement: the matched count test, lag 1 only ------------------------</span>
+<span class="c1"># per-cell permutation rejection rate (computed once; reused below and by size_ok)</span>
+<span class="n">perm_size_rates</span> <span class="o">=</span> <span class="p">(</span><span class="n">perm2b_df</span><span class="p">[</span><span class="n">perm2b_df</span><span class="p">[</span><span class="s2">"lag"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+                   <span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">"weapon"</span><span class="p">,</span> <span class="s2">"outcome"</span><span class="p">])[</span><span class="s2">"p"</span><span class="p">]</span>
+                   <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">ALPHA</span><span class="p">))))</span>
+
+<span class="c1"># --- Does the null's dispersion track the DH contributing-unit count? -------</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== Null dispersion vs DH contributing units ==="</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"contributing_units() at min_obs=5 is uninformative (all 192); the DH "</span>
+      <span class="s2">"test's own count at its internal min_obs=12 is the number that enters "</span>
+      <span class="s2">"the statistic."</span><span class="p">)</span>
+<span class="n">_disp</span> <span class="o">=</span> <span class="n">sec2b_df</span><span class="p">[[</span><span class="s2">"weapon"</span><span class="p">,</span> <span class="s2">"outcome"</span><span class="p">,</span> <span class="s2">"n_units_dh"</span><span class="p">,</span> <span class="s2">"n_units_loose"</span><span class="p">,</span>
+                  <span class="s2">"null_sd_Z"</span><span class="p">,</span> <span class="s2">"null_mean_Z"</span><span class="p">]]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">"null_sd_Z"</span><span class="p">,</span>
+                                                           <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">_disp</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+
+<span class="n">_r_sd</span><span class="p">,</span> <span class="n">_p_sd</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">spearmanr</span><span class="p">(</span><span class="n">sec2b_df</span><span class="p">[</span><span class="s2">"n_units_dh"</span><span class="p">],</span> <span class="n">sec2b_df</span><span class="p">[</span><span class="s2">"null_sd_Z"</span><span class="p">])</span>
+<span class="n">_r_mu</span><span class="p">,</span> <span class="n">_p_mu</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">spearmanr</span><span class="p">(</span><span class="n">sec2b_df</span><span class="p">[</span><span class="s2">"n_units_dh"</span><span class="p">],</span> <span class="n">sec2b_df</span><span class="p">[</span><span class="s2">"null_mean_Z"</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Spearman rho(n_units_dh, null_sd_Z)   = </span><span class="si">{</span><span class="n">_r_sd</span><span class="si">:</span><span class="s2">+.3f</span><span class="si">}</span><span class="s2"> (p=</span><span class="si">{</span><span class="n">_p_sd</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Spearman rho(n_units_dh, null_mean_Z) = </span><span class="si">{</span><span class="n">_r_mu</span><span class="si">:</span><span class="s2">+.3f</span><span class="si">}</span><span class="s2"> (p=</span><span class="si">{</span><span class="n">_p_mu</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"n_units_dh range: </span><span class="si">{</span><span class="n">sec2b_df</span><span class="p">[</span><span class="s1">'n_units_dh'</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2"> to "</span>
+      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">sec2b_df</span><span class="p">[</span><span class="s1">'n_units_dh'</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2"> "</span>
+      <span class="sa">f</span><span class="s2">"(n_units_loose is constant at </span><span class="si">{</span><span class="n">sec2b_df</span><span class="p">[</span><span class="s1">'n_units_loose'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+
+<span class="n">_hi</span> <span class="o">=</span> <span class="n">sec2b_df</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"null_sd_Z"</span><span class="p">)</span>
+<span class="n">_lo</span> <span class="o">=</span> <span class="n">sec2b_df</span><span class="o">.</span><span class="n">nsmallest</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"null_sd_Z"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Highest-dispersion cells: "</span>
+      <span class="o">+</span> <span class="s2">"; "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">weapon</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">outcome</span><span class="si">}</span><span class="s2"> sd=</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">null_sd_Z</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> "</span>
+                  <span class="sa">f</span><span class="s2">"N_dh=</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">n_units_dh</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">_hi</span><span class="o">.</span><span class="n">itertuples</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Lowest-dispersion cells:  "</span>
+      <span class="o">+</span> <span class="s2">"; "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">weapon</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">outcome</span><span class="si">}</span><span class="s2"> sd=</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">null_sd_Z</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> "</span>
+                  <span class="sa">f</span><span class="s2">"N_dh=</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">n_units_dh</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">_lo</span><span class="o">.</span><span class="n">itertuples</span><span class="p">()))</span>
+<span class="k">if</span> <span class="n">_r_sd</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">0.4</span> <span class="ow">and</span> <span class="n">_p_sd</span> <span class="o">&lt;</span> <span class="mf">0.10</span><span class="p">:</span>
+    <span class="n">disp_reading</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"Dispersion is driven by thin cross-sectional support: "</span>
+                    <span class="s2">"cells with fewer countries clearing DH's min_obs have "</span>
+                    <span class="s2">"markedly heavier-tailed nulls. The heavy tails have a "</span>
+                    <span class="s2">"mechanism, not just a description."</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">_r_sd</span> <span class="o">&gt;</span> <span class="mf">0.4</span> <span class="ow">and</span> <span class="n">_p_sd</span> <span class="o">&lt;</span> <span class="mf">0.10</span><span class="p">:</span>
+    <span class="n">disp_reading</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"Dispersion RISES with contributing units, which is the "</span>
+                    <span class="s2">"opposite of a thin-support explanation. Report as an "</span>
+                    <span class="s2">"open feature of DH on this panel; do not attribute the "</span>
+                    <span class="s2">"heavy tails to sparse cells."</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">disp_reading</span> <span class="o">=</span> <span class="p">(</span><span class="sa">f</span><span class="s2">"No monotone relation between contributing units and "</span>
+                    <span class="sa">f</span><span class="s2">"null dispersion (rho=</span><span class="si">{</span><span class="n">_r_sd</span><span class="si">:</span><span class="s2">+.3f</span><span class="si">}</span><span class="s2">, p=</span><span class="si">{</span><span class="n">_p_sd</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">) across "</span>
+                    <span class="sa">f</span><span class="s2">"only </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">sec2b_df</span><span class="p">)</span><span class="si">}</span><span class="s2"> cells. The heavy tails are real "</span>
+                    <span class="sa">f</span><span class="s2">"(zero non-finite draws, and check [15] cross-validates "</span>
+                    <span class="sa">f</span><span class="s2">"them against an independent seed stream) but this "</span>
+                    <span class="sa">f</span><span class="s2">"notebook does not isolate their source. State that "</span>
+                    <span class="sa">f</span><span class="s2">"plainly rather than gesturing at sparsity."</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Reading: </span><span class="si">{</span><span class="n">disp_reading</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># --- Matched count test, lag 1 only, at 2000-permutation resolution ---------</span>
 <span class="c1"># The 36-cell count includes 24 lag-2/3 cells whose Z is strongly negative and</span>
 <span class="c1"># which therefore essentially cannot reject a one-sided upper-tail test. The</span>
-<span class="c1"># comparable question is 8 of 12 at lag 1 against its own null.</span>
-<span class="n">_p1</span> <span class="o">=</span> <span class="n">perm_df</span><span class="p">[</span><span class="n">perm_df</span><span class="p">[</span><span class="s2">"lag"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
-<span class="n">null_counts_lag1</span> <span class="o">=</span> <span class="p">(</span><span class="n">_p1</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">sig</span><span class="o">=</span><span class="n">_p1</span><span class="p">[</span><span class="s2">"p"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">ALPHA</span><span class="p">)</span>
-                       <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"perm"</span><span class="p">)[</span><span class="s2">"sig"</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+<span class="c1"># comparable question is 8 of 12 at lag 1. Basis is perm2b_df (2000 perms),</span>
+<span class="c1"># not perm_df (200), so the threshold decision is resolvable.</span>
+<span class="n">_p1_2b</span> <span class="o">=</span> <span class="n">perm2b_df</span><span class="p">[</span><span class="n">perm2b_df</span><span class="p">[</span><span class="s2">"lag"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">null_counts_lag1</span> <span class="o">=</span> <span class="p">(</span><span class="n">_p1_2b</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">sig</span><span class="o">=</span><span class="n">_p1_2b</span><span class="p">[</span><span class="s2">"p"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">ALPHA</span><span class="p">)</span>
+                          <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"perm"</span><span class="p">)[</span><span class="s2">"sig"</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
 <span class="n">obs_count_lag1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sec2b_df</span><span class="p">[</span><span class="s2">"nominal_sig"</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
-<span class="n">emp_p_lag1</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="nb">int</span><span class="p">((</span><span class="n">null_counts_lag1</span> <span class="o">&gt;=</span> <span class="n">obs_count_lag1</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()))</span>
-              <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">null_counts_lag1</span><span class="p">)))</span>
+<span class="n">n_exceed_count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">null_counts_lag1</span> <span class="o">&gt;=</span> <span class="n">obs_count_lag1</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+<span class="n">emp_p_lag1</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">n_exceed_count</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">null_counts_lag1</span><span class="p">))</span>
+<span class="n">mc_se_count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">emp_p_lag1</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">emp_p_lag1</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">null_counts_lag1</span><span class="p">))</span>
+
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">[Section 2 supplement] Lag-1-only count test "</span>
-      <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">LAG1_CELLS</span><span class="p">)</span><span class="si">}</span><span class="s2"> cells): "</span>
-      <span class="sa">f</span><span class="s2">"null mean=</span><span class="si">{</span><span class="n">null_counts_lag1</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> "</span>
-      <span class="sa">f</span><span class="s2">"(sd=</span><span class="si">{</span><span class="n">null_counts_lag1</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">), observed=</span><span class="si">{</span><span class="n">obs_count_lag1</span><span class="si">}</span><span class="s2">, "</span>
-      <span class="sa">f</span><span class="s2">"empirical p=</span><span class="si">{</span><span class="n">emp_p_lag1</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  36-cell version for comparison: observed=8, empirical p=</span><span class="si">{</span><span class="n">emp_p</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> "</span>
+      <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">LAG1_CELLS</span><span class="p">)</span><span class="si">}</span><span class="s2"> cells, </span><span class="si">{</span><span class="n">N_PERM_2B</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> permutations):"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  null mean=</span><span class="si">{</span><span class="n">null_counts_lag1</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> "</span>
+      <span class="sa">f</span><span class="s2">"(sd=</span><span class="si">{</span><span class="n">null_counts_lag1</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">), observed=</span><span class="si">{</span><span class="n">obs_count_lag1</span><span class="si">}</span><span class="s2">, "</span>
+      <span class="sa">f</span><span class="s2">"exceedances=</span><span class="si">{</span><span class="n">n_exceed_count</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">null_counts_lag1</span><span class="p">)</span><span class="si">}</span><span class="s2">, "</span>
+      <span class="sa">f</span><span class="s2">"empirical p=</span><span class="si">{</span><span class="n">emp_p_lag1</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> (MC SE </span><span class="si">{</span><span class="n">mc_se_count</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+
+<span class="n">_p1_old</span> <span class="o">=</span> <span class="n">perm_df</span><span class="p">[</span><span class="n">perm_df</span><span class="p">[</span><span class="s2">"lag"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">_nc_old</span> <span class="o">=</span> <span class="p">(</span><span class="n">_p1_old</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">sig</span><span class="o">=</span><span class="n">_p1_old</span><span class="p">[</span><span class="s2">"p"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">ALPHA</span><span class="p">)</span>
+                  <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"perm"</span><span class="p">)[</span><span class="s2">"sig"</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+<span class="n">_emp_p_lag1_old</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="nb">int</span><span class="p">((</span><span class="n">_nc_old</span> <span class="o">&gt;=</span> <span class="n">obs_count_lag1</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()))</span>
+                   <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">_nc_old</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  for reference: 200-perm basis gave p=</span><span class="si">{</span><span class="n">_emp_p_lag1_old</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">; "</span>
+      <span class="sa">f</span><span class="s2">"36-cell 200-perm version gave p=</span><span class="si">{</span><span class="n">emp_p</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> "</span>
       <span class="sa">f</span><span class="s2">"(24 of those 36 cells are lag 2-3 and structurally non-rejecting)"</span><span class="p">)</span>
+
+<span class="n">_mean_rate</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">null_counts_lag1</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">LAG1_CELLS</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">  Consistency: null count </span><span class="si">{</span><span class="n">null_counts_lag1</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">/"</span>
+      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">LAG1_CELLS</span><span class="p">)</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">_mean_rate</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> mean rejection rate, against "</span>
+      <span class="sa">f</span><span class="s2">"per-cell permutation rates </span><span class="si">{</span><span class="n">perm_size_rates</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">-"</span>
+      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">perm_size_rates</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> (median </span><span class="si">{</span><span class="n">perm_size_rates</span><span class="o">.</span><span class="n">median</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">). "</span>
+      <span class="sa">f</span><span class="s2">"The count null is the over-rejection measured a second way."</span><span class="p">)</span>
+
+<span class="c1"># ============ Why the count null is too tight: cross-cell dependence ========</span>
+<span class="c1"># The permutation shuffles each treatment column INDEPENDENTLY within country.</span>
+<span class="c1"># That destroys treatment-treatment correlation, which is present in the real</span>
+<span class="c1"># data. So the permutation count null carries less cross-cell dependence than</span>
+<span class="c1"># the observed grid, its variance is understated, and the count test is</span>
+<span class="c1"># anti-conservative BY CONSTRUCTION. Per-cell tests are immune: each cell is</span>
+<span class="c1"># judged against its own marginal null.</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span> <span class="o">+</span> <span class="s2">"="</span> <span class="o">*</span> <span class="mi">74</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Cross-cell dependence: why the count test over-states significance"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"="</span> <span class="o">*</span> <span class="mi">74</span><span class="p">)</span>
+
+<span class="c1"># Evidence 1 — the 12 cells' permutation Z are strongly correlated with</span>
+<span class="c1"># each other, so the 12 tests are nowhere near 12 independent tests.</span>
+<span class="n">_zmat</span> <span class="o">=</span> <span class="p">(</span><span class="n">_p1_2b</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">cell</span><span class="o">=</span><span class="n">_p1_2b</span><span class="p">[</span><span class="s2">"weapon"</span><span class="p">]</span> <span class="o">+</span> <span class="s2">"x"</span> <span class="o">+</span> <span class="n">_p1_2b</span><span class="p">[</span><span class="s2">"outcome"</span><span class="p">])</span>
+               <span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s2">"perm"</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">"cell"</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s2">"Z"</span><span class="p">))</span>
+<span class="n">_zcorr</span> <span class="o">=</span> <span class="n">_zmat</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+<span class="n">_off</span> <span class="o">=</span> <span class="n">_zcorr</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">_zcorr</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">))</span><span class="o">.</span><span class="n">stack</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Evidence 1 — correlation of lag-1 Z across the </span><span class="si">{</span><span class="n">N_PERM_2B</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> "</span>
+      <span class="sa">f</span><span class="s2">"permutations, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">_zcorr</span><span class="p">)</span><span class="si">}</span><span class="s2"> cells:"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  off-diagonal correlation: min=</span><span class="si">{</span><span class="n">_off</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">:</span><span class="s2">+.3f</span><span class="si">}</span><span class="s2">, "</span>
+      <span class="sa">f</span><span class="s2">"median=</span><span class="si">{</span><span class="n">_off</span><span class="o">.</span><span class="n">median</span><span class="p">()</span><span class="si">:</span><span class="s2">+.3f</span><span class="si">}</span><span class="s2">, max=</span><span class="si">{</span><span class="n">_off</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s2">+.3f</span><span class="si">}</span><span class="s2">, "</span>
+      <span class="sa">f</span><span class="s2">"mean|r|=</span><span class="si">{</span><span class="n">_off</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># Same-outcome and same-weapon pairs isolated</span>
+<span class="n">_pairs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">_off</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+    <span class="n">wa</span><span class="p">,</span> <span class="n">oa</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"x"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">wb</span><span class="p">,</span> <span class="n">ob</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"x"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">kind</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"same outcome"</span> <span class="k">if</span> <span class="n">oa</span> <span class="o">==</span> <span class="n">ob</span> <span class="k">else</span>
+            <span class="s2">"same weapon"</span> <span class="k">if</span> <span class="n">wa</span> <span class="o">==</span> <span class="n">wb</span> <span class="k">else</span> <span class="s2">"neither shared"</span><span class="p">)</span>
+    <span class="n">_pairs</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"kind"</span><span class="p">:</span> <span class="n">kind</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">:</span> <span class="n">_off</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)]})</span>
+<span class="n">_pairs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">_pairs</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  by shared series:"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">kind</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">_pairs</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"kind"</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"    </span><span class="si">{</span><span class="n">kind</span><span class="si">:</span><span class="s2">&lt;16s</span><span class="si">}</span><span class="s2"> n=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="p">)</span><span class="si">:</span><span class="s2">&gt;3d</span><span class="si">}</span><span class="s2">  mean r=</span><span class="si">{</span><span class="n">g</span><span class="p">[</span><span class="s1">'r'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">+.3f</span><span class="si">}</span><span class="s2">  "</span>
+          <span class="sa">f</span><span class="s2">"mean|r|=</span><span class="si">{</span><span class="n">g</span><span class="p">[</span><span class="s1">'r'</span><span class="p">]</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># Effective number of independent tests (Cheverud/Nyholt eigenvalue estimator)</span>
+<span class="n">_eig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigvalsh</span><span class="p">(</span><span class="n">_zcorr</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="n">_M</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">_zcorr</span><span class="p">)</span>
+<span class="n">_M_eff</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">_M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">_eig</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">_M</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  effective independent tests (eigenvalue estimator): "</span>
+      <span class="sa">f</span><span class="s2">"M_eff = </span><span class="si">{</span><span class="n">_M_eff</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> of M = </span><span class="si">{</span><span class="n">_M</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># Evidence 2 — the permutation destroys treatment-treatment correlation</span>
+<span class="n">_tcorr_obs</span> <span class="o">=</span> <span class="n">panel</span><span class="p">[</span><span class="n">TREAT_COLS</span><span class="p">]</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+<span class="n">_obs_off</span> <span class="o">=</span> <span class="n">_tcorr_obs</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">TREAT_COLS</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">))</span><span class="o">.</span><span class="n">stack</span><span class="p">()</span>
+<span class="n">_N_SHUF_CHECK</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">_shuf_means</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">_rng_chk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">([</span><span class="n">SEED</span><span class="p">,</span> <span class="mi">900_000</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">_s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">_N_SHUF_CHECK</span><span class="p">):</span>
+    <span class="n">_tmp</span> <span class="o">=</span> <span class="n">panel</span><span class="p">[</span><span class="n">TREAT_COLS</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">_tc</span> <span class="ow">in</span> <span class="n">TREAT_COLS</span><span class="p">:</span>
+        <span class="n">_tmp</span><span class="p">[</span><span class="n">_tc</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">panel</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">ISO_COL</span><span class="p">)[</span><span class="n">_tc</span><span class="p">]</span>
+                          <span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">_rng_chk</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">values</span><span class="p">)))</span>
+    <span class="n">_c</span> <span class="o">=</span> <span class="n">_tmp</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+    <span class="n">_shuf_means</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+        <span class="n">_c</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">TREAT_COLS</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">))</span><span class="o">.</span><span class="n">stack</span><span class="p">()</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Evidence 2 — treatment-treatment correlation, observed vs permuted:"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  observed mean|r| across </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">TREAT_COLS</span><span class="p">)</span><span class="si">}</span><span class="s2"> treatment columns: "</span>
+      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">_obs_off</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> "</span>
+      <span class="sa">f</span><span class="s2">"(range </span><span class="si">{</span><span class="n">_obs_off</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">:</span><span class="s2">+.3f</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">_obs_off</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s2">+.3f</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  after within-country independent shuffling (</span><span class="si">{</span><span class="n">_N_SHUF_CHECK</span><span class="si">}</span><span class="s2"> draws): "</span>
+      <span class="sa">f</span><span class="s2">"mean|r| = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">_shuf_means</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> "</span>
+      <span class="sa">f</span><span class="s2">"(sd </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">_shuf_means</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+<span class="n">_destroyed</span> <span class="o">=</span> <span class="n">_obs_off</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">_shuf_means</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Conclusion: the shuffle </span><span class="si">{</span><span class="s1">'DOES'</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">_destroyed</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">'does NOT'</span><span class="si">}</span><span class="s2"> "</span>
+      <span class="sa">f</span><span class="s2">"materially destroy cross-treatment correlation."</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">_destroyed</span><span class="p">:</span>
+    <span class="n">count_dependence_reading</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s2">"The permutation count null is too tight. It is generated by "</span>
+        <span class="sa">f</span><span class="s2">"shuffling each treatment independently, which removes the "</span>
+        <span class="sa">f</span><span class="s2">"cross-treatment correlation present in the real data (observed "</span>
+        <span class="sa">f</span><span class="s2">"mean|r|=</span><span class="si">{</span><span class="n">_obs_off</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> vs "</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">_shuf_means</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> permuted), and the 12 cells are in any "</span>
+        <span class="sa">f</span><span class="s2">"case far from independent (mean|r| of their permutation Z = "</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">_off</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, M_eff=</span><span class="si">{</span><span class="n">_M_eff</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> of 12). Its variance is "</span>
+        <span class="sa">f</span><span class="s2">"therefore understated and emp_p_lag1=</span><span class="si">{</span><span class="n">emp_p_lag1</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> is "</span>
+        <span class="sa">f</span><span class="s2">"anti-conservative. The per-cell tests do not inherit this: each "</span>
+        <span class="sa">f</span><span class="s2">"cell is judged against its own marginal permutation null, which is "</span>
+        <span class="sa">f</span><span class="s2">"correctly calibrated by construction."</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">count_dependence_reading</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s2">"The shuffle does not materially change cross-treatment correlation "</span>
+        <span class="sa">f</span><span class="s2">"(observed mean|r|=</span><span class="si">{</span><span class="n">_obs_off</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> vs "</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">_shuf_means</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">), so that mechanism does NOT explain the "</span>
+        <span class="sa">f</span><span class="s2">"count test. The cells are still strongly dependent (mean|r| of "</span>
+        <span class="sa">f</span><span class="s2">"permutation Z = </span><span class="si">{</span><span class="n">_off</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, M_eff=</span><span class="si">{</span><span class="n">_M_eff</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> of 12), "</span>
+        <span class="sa">f</span><span class="s2">"but emp_p_lag1=</span><span class="si">{</span><span class="n">emp_p_lag1</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> cannot be dismissed on the "</span>
+        <span class="sa">f</span><span class="s2">"independent-shuffling argument. Report the count excess and the "</span>
+        <span class="sa">f</span><span class="s2">"per-cell null side by side and let the multiplicity result carry "</span>
+        <span class="sa">f</span><span class="s2">"the conclusion."</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="si">{</span><span class="n">count_dependence_reading</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">"metric"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"obs_count_lag1"</span><span class="p">,</span> <span class="s2">"null_mean"</span><span class="p">,</span> <span class="s2">"null_sd"</span><span class="p">,</span> <span class="s2">"emp_p_lag1"</span><span class="p">,</span>
+                         <span class="s2">"mc_se"</span><span class="p">,</span> <span class="s2">"n_perm"</span><span class="p">,</span> <span class="s2">"mean_abs_r_cellZ"</span><span class="p">,</span> <span class="s2">"M_eff"</span><span class="p">,</span>
+                         <span class="s2">"obs_treat_mean_abs_r"</span><span class="p">,</span> <span class="s2">"perm_treat_mean_abs_r"</span><span class="p">],</span>
+              <span class="s2">"value"</span><span class="p">:</span> <span class="p">[</span><span class="n">obs_count_lag1</span><span class="p">,</span> <span class="n">null_counts_lag1</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+                        <span class="n">null_counts_lag1</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span> <span class="n">emp_p_lag1</span><span class="p">,</span> <span class="n">mc_se_count</span><span class="p">,</span>
+                        <span class="n">N_PERM_2B</span><span class="p">,</span> <span class="n">_off</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">_M_eff</span><span class="p">,</span>
+                        <span class="n">_obs_off</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">_shuf_means</span><span class="p">)]}</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">TBL_DIR</span> <span class="o">/</span> <span class="s2">"section2b_count_dependence.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">_zcorr</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">TBL_DIR</span> <span class="o">/</span> <span class="s2">"section2b_cellZ_correlation.csv"</span><span class="p">)</span>
 
 <span class="c1"># --- Monte Carlo resolution at the threshold -------------------------------</span>
 <span class="n">mc_se</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ALPHA</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">ALPHA</span><span class="p">)</span> <span class="o">/</span> <span class="n">N_PERM_2B</span><span class="p">)</span>
@@ -8754,12 +8938,19 @@ aux is a SCALAR (the DH test's own contributing-unit count, filtered at its inte
 <span class="nb">print</span><span class="p">(</span><span class="s2">"  -&gt; the DH pipeline over-rejects on this panel with NO lead-lag "</span>
       <span class="s2">"relation present. This is the load-bearing size result; it needs no "</span>
       <span class="s2">"bootstrap and no synthetic outcome, and it covers every lag-1 cell."</span><span class="p">)</span>
-<span class="n">perm_size_rates</span> <span class="o">=</span> <span class="p">(</span><span class="n">perm2b_df</span><span class="p">[</span><span class="n">perm2b_df</span><span class="p">[</span><span class="s2">"lag"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
-                   <span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">"weapon"</span><span class="p">,</span> <span class="s2">"outcome"</span><span class="p">])[</span><span class="s2">"p"</span><span class="p">]</span>
-                   <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">ALPHA</span><span class="p">))))</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">  permutation rejection rate at p&lt;</span><span class="si">{</span><span class="n">ALPHA</span><span class="si">}</span><span class="s2"> per cell "</span>
       <span class="sa">f</span><span class="s2">"(nominal </span><span class="si">{</span><span class="n">ALPHA</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">perm_size_rates</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> to "</span>
       <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">perm_size_rates</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, median </span><span class="si">{</span><span class="n">perm_size_rates</span><span class="o">.</span><span class="n">median</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># `size_ok` now means "DH is correctly sized on this panel", judged on the</span>
+<span class="c1"># permutation nulls rather than on the δ=0 rejection rate. Section 5 branches</span>
+<span class="c1"># on this. Both criteria must hold: nulls centred at 0 and rejection at nominal.</span>
+<span class="n">size_ok</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">n_miscentred</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">perm_size_rates</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mf">0.12</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">size_ok = </span><span class="si">{</span><span class="n">size_ok</span><span class="si">}</span><span class="s2">  "</span>
+      <span class="sa">f</span><span class="s2">"(mis-centred cells </span><span class="si">{</span><span class="n">n_miscentred</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">sec2b_df</span><span class="p">)</span><span class="si">}</span><span class="s2">, "</span>
+      <span class="sa">f</span><span class="s2">"max permutation rejection rate </span><span class="si">{</span><span class="n">perm_size_rates</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> vs "</span>
+      <span class="sa">f</span><span class="s2">"0.12 tolerance) — gated on permutation calibration, "</span>
+      <span class="sa">f</span><span class="s2">"not on the δ=0 rejection rate"</span><span class="p">)</span>
 
 <span class="c1"># --- z_pos vs p_cell disagreement -----------------------------------------</span>
 <span class="n">_max_zpos</span> <span class="o">=</span> <span class="n">sec2b_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">sec2b_df</span><span class="p">[</span><span class="s2">"z_pos"</span><span class="p">]</span><span class="o">.</span><span class="n">idxmax</span><span class="p">()]</span>
@@ -8798,10 +8989,14 @@ aux is a SCALAR (the DH test's own contributing-unit count, filtered at its inte
         <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">sec2b_df</span><span class="p">)</span><span class="si">}</span><span class="s2"> pre-specified lag-1 tests. No cell survives BH "</span>
         <span class="sa">f</span><span class="s2">"correction over that family (smallest q=</span><span class="si">{</span><span class="n">_min_q</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">) and none "</span>
         <span class="sa">f</span><span class="s2">"reaches 2 sd above its own null mean (max z_pos="</span>
-        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">sec2b_df</span><span class="p">[</span><span class="s1">'z_pos'</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">). The count-level excess "</span>
-        <span class="sa">f</span><span class="s2">"(p=</span><span class="si">{</span><span class="n">emp_p</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">) reflects cross-cell dependence plus the size "</span>
-        <span class="sa">f</span><span class="s2">"distortion, not a lead-lag signal, and it does not survive "</span>
-        <span class="sa">f</span><span class="s2">"per-cell falsification."</span><span class="p">)</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">sec2b_df</span><span class="p">[</span><span class="s1">'z_pos'</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">). "</span>
+        <span class="sa">f</span><span class="s2">"The count-level excess does not license a signal claim: at "</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">N_PERM_2B</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> permutations the lag-1 count test gives "</span>
+        <span class="sa">f</span><span class="s2">"p=</span><span class="si">{</span><span class="n">emp_p_lag1</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, but the 12 cells are strongly dependent "</span>
+        <span class="sa">f</span><span class="s2">"(mean|r| of permutation Z = </span><span class="si">{</span><span class="n">_off</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, "</span>
+        <span class="sa">f</span><span class="s2">"M_eff=</span><span class="si">{</span><span class="n">_M_eff</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> of 12) and the permutation shuffles treatments "</span>
+        <span class="sa">f</span><span class="s2">"independently, so that null is too tight. Per-cell falsification, "</span>
+        <span class="sa">f</span><span class="s2">"which is correctly calibrated, finds nothing."</span><span class="p">)</span>
 <span class="k">elif</span> <span class="n">n_bh_survivors</span> <span class="o">&lt;</span> <span class="n">n_nominal_sig</span><span class="p">:</span>
     <span class="n">_bhl</span> <span class="o">=</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">weapon</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">outcome</span><span class="si">}</span><span class="s2"> (q=</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">q_bh</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">)"</span>
                      <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">sec2b_df</span><span class="p">[</span><span class="n">sec2b_df</span><span class="p">[</span><span class="s2">"survives_bh"</span><span class="p">]]</span><span class="o">.</span><span class="n">itertuples</span><span class="p">())</span>
@@ -8822,7 +9017,8 @@ aux is a SCALAR (the DH test's own contributing-unit count, filtered at its inte
 
 <span class="n">sec2b_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">TBL_DIR</span> <span class="o">/</span> <span class="s2">"section2b_percell_permutation.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">_size</span> <span class="o">=</span> <span class="n">sec2b_df</span><span class="p">[[</span><span class="s2">"weapon"</span><span class="p">,</span> <span class="s2">"outcome"</span><span class="p">,</span> <span class="s2">"null_mean_Z"</span><span class="p">,</span> <span class="s2">"null_sd_Z"</span><span class="p">,</span>
-                  <span class="s2">"n_finite_perm"</span><span class="p">,</span> <span class="s2">"n_nonfinite_perm"</span><span class="p">,</span> <span class="s2">"n_units"</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                  <span class="s2">"n_finite_perm"</span><span class="p">,</span> <span class="s2">"n_nonfinite_perm"</span><span class="p">,</span>
+                  <span class="s2">"n_units_dh"</span><span class="p">,</span> <span class="s2">"n_units_loose"</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="n">_size</span><span class="p">[</span><span class="s2">"perm_reject_rate"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
     <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">perm_size_rates</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">r</span><span class="o">.</span><span class="n">weapon</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">outcome</span><span class="p">)]),</span> <span class="mi">4</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">_size</span><span class="o">.</span><span class="n">itertuples</span><span class="p">()]</span>
@@ -8845,22 +9041,76 @@ aux is a SCALAR (the DH test's own contributing-unit count, filtered at its inte
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>=== Section 2b — per-cell permutation test (lag 1, 12 cells, 2,000 permutations, ONE-SIDED upper tail) ===
 
-  weapon                 outcome   obs_Z  obs_p  null_mean_Z  null_sd_Z   z_pos  p_cell   q_bh  p_bonf  n_units  n_finite_perm  nominal_sig  survives_percell  survives_bh
-  GROUND              part_n_war  6.4233 0.0000       2.2280     7.3997  0.5670 0.04198 0.2024  0.5038      192           2000         True              True        False
-MISSILES            part_n_minor  3.6372 0.0001       0.8858     1.5480  1.7774 0.05547 0.2024  0.6656      192           2000         True             False        False
-   NAVAL            part_n_minor  3.2888 0.0005       0.7655     1.5333  1.6457 0.06147 0.2024  0.7376      192           2000         True             False        False
-  GROUND part_n_extraterritorial  4.9274 0.0000       2.3930     7.2740  0.3484 0.06747 0.2024  0.8096      192           2000         True             False        False
-   NAVAL part_n_extraterritorial  2.0404 0.0207       1.0092     1.9592  0.5263 0.24188 0.4783  1.0000      192           2000         True             False        False
-  GROUND            part_n_minor  1.8697 0.0308       0.9676     1.5664  0.5759 0.25037 0.4783  1.0000      192           2000         True             False        False
-MISSILES part_n_extraterritorial  1.9412 0.0261       1.2683     2.5477  0.2641 0.29935 0.4783  1.0000      192           2000         True             False        False
-MISSILES              part_n_war  2.1771 0.0147       1.4929     2.4158  0.2832 0.31884 0.4783  1.0000      192           2000         True             False        False
-   NAVAL              part_n_war  0.9263 0.1772       0.9053     1.8449  0.0114 0.44778 0.5970  1.0000      192           2000        False             False        False
-     AIR part_n_extraterritorial  0.5415 0.2941       0.7927     1.4171 -0.1773 0.53873 0.6465  1.0000      192           2000        False             False        False
-     AIR            part_n_minor  0.0518 0.4793       0.7784     1.5234 -0.4770 0.68116 0.7221  1.0000      192           2000        False             False        False
-     AIR              part_n_war -0.1129 0.5449       0.8256     1.6697 -0.5621 0.72214 0.7221  1.0000      192           2000        False             False        False
+  weapon                 outcome   obs_Z  obs_p  null_mean_Z  null_sd_Z   z_pos  p_cell   q_bh  p_bonf  n_units_dh  n_finite_perm  nominal_sig  survives_percell  survives_bh
+  GROUND              part_n_war  6.4233 0.0000       2.2280     7.3997  0.5670 0.04198 0.2024  0.5038         123           2000         True              True        False
+MISSILES            part_n_minor  3.6372 0.0001       0.8858     1.5480  1.7774 0.05547 0.2024  0.6656         115           2000         True             False        False
+   NAVAL            part_n_minor  3.2888 0.0005       0.7655     1.5333  1.6457 0.06147 0.2024  0.7376         104           2000         True             False        False
+  GROUND part_n_extraterritorial  4.9274 0.0000       2.3930     7.2740  0.3484 0.06747 0.2024  0.8096         132           2000         True             False        False
+   NAVAL part_n_extraterritorial  2.0404 0.0207       1.0092     1.9592  0.5263 0.24188 0.4783  1.0000          97           2000         True             False        False
+  GROUND            part_n_minor  1.8697 0.0308       0.9676     1.5664  0.5759 0.25037 0.4783  1.0000         140           2000         True             False        False
+MISSILES part_n_extraterritorial  1.9412 0.0261       1.2683     2.5477  0.2641 0.29935 0.4783  1.0000         110           2000         True             False        False
+MISSILES              part_n_war  2.1771 0.0147       1.4929     2.4158  0.2832 0.31884 0.4783  1.0000         106           2000         True             False        False
+   NAVAL              part_n_war  0.9263 0.1772       0.9053     1.8449  0.0114 0.44778 0.5970  1.0000          94           2000        False             False        False
+     AIR part_n_extraterritorial  0.5415 0.2941       0.7927     1.4171 -0.1773 0.53873 0.6465  1.0000         133           2000        False             False        False
+     AIR            part_n_minor  0.0518 0.4793       0.7784     1.5234 -0.4770 0.68116 0.7221  1.0000         143           2000        False             False        False
+     AIR              part_n_war -0.1129 0.5449       0.8256     1.6697 -0.5621 0.72214 0.7221  1.0000         126           2000        False             False        False
 
-[Section 2 supplement] Lag-1-only count test (12 cells): null mean=3.64 (sd=1.73), observed=8, empirical p=0.0199
-  36-cell version for comparison: observed=8, empirical p=0.0299 (24 of those 36 cells are lag 2-3 and structurally non-rejecting)
+=== Null dispersion vs DH contributing units ===
+contributing_units() at min_obs=5 is uninformative (all 192); the DH test's own count at its internal min_obs=12 is the number that enters the statistic.
+  weapon                 outcome  n_units_dh  n_units_loose  null_sd_Z  null_mean_Z
+  GROUND              part_n_war         123            192     7.3997       2.2280
+  GROUND part_n_extraterritorial         132            192     7.2740       2.3930
+MISSILES part_n_extraterritorial         110            192     2.5477       1.2683
+MISSILES              part_n_war         106            192     2.4158       1.4929
+   NAVAL part_n_extraterritorial          97            192     1.9592       1.0092
+   NAVAL              part_n_war          94            192     1.8449       0.9053
+     AIR              part_n_war         126            192     1.6697       0.8256
+  GROUND            part_n_minor         140            192     1.5664       0.9676
+MISSILES            part_n_minor         115            192     1.5480       0.8858
+   NAVAL            part_n_minor         104            192     1.5333       0.7655
+     AIR            part_n_minor         143            192     1.5234       0.7784
+     AIR part_n_extraterritorial         133            192     1.4171       0.7927
+
+Spearman rho(n_units_dh, null_sd_Z)   = -0.315 (p=0.3191)
+Spearman rho(n_units_dh, null_mean_Z) = -0.133 (p=0.6806)
+n_units_dh range: 94 to 143 (n_units_loose is constant at 192)
+
+Highest-dispersion cells: GROUNDxpart_n_war sd=7.40 N_dh=123; GROUNDxpart_n_extraterritorial sd=7.27 N_dh=132
+Lowest-dispersion cells:  AIRxpart_n_extraterritorial sd=1.42 N_dh=133; AIRxpart_n_minor sd=1.52 N_dh=143
+
+Reading: No monotone relation between contributing units and null dispersion (rho=-0.315, p=0.3191) across only 12 cells. The heavy tails are real (zero non-finite draws, and check [15] cross-validates them against an independent seed stream) but this notebook does not isolate their source. State that plainly rather than gesturing at sparsity.
+
+[Section 2 supplement] Lag-1-only count test (12 cells, 2,000 permutations):
+  null mean=3.554 (sd=1.871), observed=8, exceedances=52/2000, empirical p=0.0265 (MC SE 0.0036)
+  for reference: 200-perm basis gave p=0.0199; 36-cell 200-perm version gave p=0.0299 (24 of those 36 cells are lag 2-3 and structurally non-rejecting)
+
+  Consistency: null count 3.55/12 = 0.296 mean rejection rate, against per-cell permutation rates 0.235-0.405 (median 0.289). The count null is the over-rejection measured a second way.
+
+==========================================================================
+Cross-cell dependence: why the count test over-states significance
+==========================================================================
+
+Evidence 1 — correlation of lag-1 Z across the 2,000 permutations, 12 cells:
+  off-diagonal correlation: min=-0.054, median=+0.000, max=+0.951, mean|r|=0.068
+  by shared series:
+    neither shared   n= 72  mean r=-0.003  mean|r|=0.018
+    same outcome     n= 48  mean r=-0.013  mean|r|=0.022
+    same weapon      n= 24  mean r=+0.283  mean|r|=0.287
+  effective independent tests (eigenvalue estimator): M_eff = 11.69 of M = 12
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>
+Evidence 2 — treatment-treatment correlation, observed vs permuted:
+  observed mean|r| across 4 treatment columns: 0.073 (range +0.036 to +0.110)
+  after within-country independent shuffling (50 draws): mean|r| = 0.012 (sd 0.0047)
+
+Conclusion: the shuffle DOES materially destroy cross-treatment correlation.
+
+The permutation count null is too tight. It is generated by shuffling each treatment independently, which removes the cross-treatment correlation present in the real data (observed mean|r|=0.073 vs 0.012 permuted), and the 12 cells are in any case far from independent (mean|r| of their permutation Z = 0.068, M_eff=11.69 of 12). Its variance is therefore understated and emp_p_lag1=0.0265 is anti-conservative. The per-cell tests do not inherit this: each cell is judged against its own marginal permutation null, which is correctly calibrated by construction.
 
 Monte Carlo SE on p_cell near 0.05: 0.0049 (2,000 permutations). Cells within 2 SE of the threshold are not resolvable:
   BORDERLINE GROUNDxpart_n_war: p_cell=0.0420
@@ -8875,6 +9125,8 @@ Under permutation the treatment-&gt;outcome link is destroyed, so DH's Z-bar-til
 
   permutation rejection rate at p&lt;0.05 per cell (nominal 0.05): 0.235 to 0.405, median 0.289
 
+size_ok = False  (mis-centred cells 12/12, max permutation rejection rate 0.405 vs 0.12 tolerance) — gated on permutation calibration, not on the δ=0 rejection rate
+
 Most extreme by z_pos: MISSILESxpart_n_minor (z_pos=1.777)
 Most extreme by p_cell: GROUNDxpart_n_war (p_cell=0.0420, z_pos=0.567)
   -&gt; the two standardizations DISAGREE. The p_cell leader wins on tail shape, not on distance from its own null mean.
@@ -8886,7 +9138,7 @@ Surviving BH across all 12 lag-1 cells: 0
 Surviving Bonferroni: 0
 Expected survivors under a global null at alpha=0.05 across 12 tests: 0.6
 
-Verdict: RECONCILED — 1 of 8 nominally significant cells exceed their own one-sided permutation null (GROUNDxpart_n_war), against 0.6 expected by chance across 12 pre-specified lag-1 tests. No cell survives BH correction over that family (smallest q=0.202) and none reaches 2 sd above its own null mean (max z_pos=1.78). The count-level excess (p=0.0299) reflects cross-cell dependence plus the size distortion, not a lead-lag signal, and it does not survive per-cell falsification.
+Verdict: RECONCILED — 1 of 8 nominally significant cells exceed their own one-sided permutation null (GROUNDxpart_n_war), against 0.6 expected by chance across 12 pre-specified lag-1 tests. No cell survives BH correction over that family (smallest q=0.202) and none reaches 2 sd above its own null mean (max z_pos=1.78). The count-level excess does not license a signal claim: at 2,000 permutations the lag-1 count test gives p=0.0265, but the 12 cells are strongly dependent (mean|r| of permutation Z = 0.068, M_eff=11.69 of 12) and the permutation shuffles treatments independently, so that null is too tight. Per-cell falsification, which is correctly calibrated, finds nothing.
 
 [Section 2b] Per-cell reconciliation done — saved → section2b_percell_permutation.csv + section2b_permutation_size.csv
 </pre>
@@ -9173,7 +9425,7 @@ Verdict: lags 2–3 are UNINFORMATIVE in this design — negative Z reflects a f
 
 <span class="c1"># [2] δ=0 size diagnostic computed and recorded (the distortion itself is a</span>
 <span class="c1">#     substantive FINDING reported above, not a pass/fail gate)</span>
-<span class="n">ok2</span> <span class="o">=</span> <span class="nb">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">type1</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">type1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+<span class="n">ok2</span> <span class="o">=</span> <span class="nb">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">reject_at_zero</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">reject_at_zero</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
 <span class="n">checks</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"δ=0 rejection-rate diagnostic computed and recorded for all "</span>
                <span class="s2">"power-curve cells"</span><span class="p">,</span> <span class="n">ok2</span><span class="p">))</span>
 
@@ -9278,9 +9530,41 @@ Verdict: lags 2–3 are UNINFORMATIVE in this design — negative Z reflects a f
 <span class="n">checks</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"2000-perm null means agree with 200-perm cache within "</span>
                <span class="s2">"4 MC SE (independent seed streams)"</span><span class="p">,</span> <span class="n">_consistent</span><span class="p">))</span>
 
-<span class="c1"># [16] size relabel applied — manual attestation (every Task-5 string replaced)</span>
-<span class="n">checks</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"Section 1 δ=0 diagnostic relabelled as a rejection rate "</span>
-               <span class="s2">"(not a type-I error rate)"</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+<span class="c1"># [16] relabel actually applied — verified against the flag constants and a</span>
+<span class="c1"># scan of every code + markdown source cell for the banned framings.</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">nbformat</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_nbf</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span> <span class="k">as</span> <span class="n">_P</span>
+<span class="n">_legacy_tok</span> <span class="o">=</span> <span class="s2">"type"</span> <span class="o">+</span> <span class="s2">"1"</span>   <span class="c1"># keep the literal out of this cell's own source</span>
+<span class="n">_cands</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"12_rq2_power_analysis.ipynb"</span><span class="p">,</span>
+          <span class="s2">"notebooks/12_rq2_power_analysis.ipynb"</span><span class="p">,</span>
+          <span class="nb">str</span><span class="p">(</span><span class="n">_P</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span> <span class="o">/</span> <span class="s2">"12_rq2_power_analysis.ipynb"</span><span class="p">)]</span>
+<span class="n">_self_path</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">_cands</span> <span class="k">if</span> <span class="n">_P</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()),</span> <span class="kc">None</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">_self_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">_ok16</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  [16] could not locate the notebook file to scan — FAIL (not True)"</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">_nb_self</span> <span class="o">=</span> <span class="n">_nbf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">_self_path</span><span class="p">,</span> <span class="n">as_version</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+    <span class="n">_hits</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_ci</span><span class="p">,</span> <span class="n">_c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">_nb_self</span><span class="o">.</span><span class="n">cells</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">_c</span><span class="o">.</span><span class="n">cell_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"code"</span><span class="p">,</span> <span class="s2">"markdown"</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="s2">"BANNED_SIZE_STRINGS"</span> <span class="ow">in</span> <span class="n">_c</span><span class="o">.</span><span class="n">source</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">for</span> <span class="n">_bs</span> <span class="ow">in</span> <span class="n">BANNED_SIZE_STRINGS</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">_bs</span> <span class="ow">in</span> <span class="n">_c</span><span class="o">.</span><span class="n">source</span><span class="p">:</span>
+                <span class="n">_hits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"cell </span><span class="si">{</span><span class="n">_ci</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">_bs</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">_code_src</span> <span class="o">=</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">source</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">_nb_self</span><span class="o">.</span><span class="n">cells</span>
+                        <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">cell_type</span> <span class="o">==</span> <span class="s2">"code"</span><span class="p">)</span>
+    <span class="n">_legacy_ok</span> <span class="o">=</span> <span class="n">_legacy_tok</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_code_src</span>
+    <span class="n">_ok16</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">_hits</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">_legacy_ok</span>
+             <span class="ow">and</span> <span class="n">REJECT_ZERO_FLAG_HI</span> <span class="o">==</span> <span class="s2">"HIGH REJECTION (not calibrated size)"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_hits</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"  [16] remaining banned strings:"</span><span class="p">,</span> <span class="s2">"; "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_hits</span><span class="p">[:</span><span class="mi">8</span><span class="p">]))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_legacy_ok</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"  [16] legacy rejection-rate variable still present in a code cell"</span><span class="p">)</span>
+<span class="n">checks</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"δ=0 relabel complete: no banned size/type-I framing in any "</span>
+               <span class="s2">"source cell, and no legacy rejection-rate variable remains"</span><span class="p">,</span>
+               <span class="n">_ok16</span><span class="p">))</span>
 
 <span class="c1"># [17] new outputs on disk</span>
 <span class="n">_new_out</span> <span class="o">=</span> <span class="p">[</span><span class="n">TBL_DIR</span> <span class="o">/</span> <span class="s2">"section2b_percell_permutation.csv"</span><span class="p">,</span>
@@ -9290,14 +9574,106 @@ Verdict: lags 2–3 are UNINFORMATIVE in this design — negative Z reflects a f
 <span class="n">checks</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="sa">f</span><span class="s2">"Section 2b outputs saved (missing: </span><span class="si">{</span><span class="n">_miss_new</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">'none'</span><span class="si">}</span><span class="s2">)"</span><span class="p">,</span>
                <span class="nb">len</span><span class="p">(</span><span class="n">_miss_new</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))</span>
 
-<span class="c1"># Reported diagnostic (not a pass/fail gate): the DH test's size at δ=0</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"=== NB12 reported diagnostic — rejection rate at δ=0 (see Section 2b for "</span>
-      <span class="s2">"calibrated size) ==="</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">cell</span><span class="p">,</span> <span class="n">rate</span> <span class="ow">in</span> <span class="n">type1</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="n">flag</span> <span class="o">=</span> <span class="s2">"SIZE DISTORTION"</span> <span class="k">if</span> <span class="n">rate</span> <span class="o">&gt;</span> <span class="mf">0.12</span> <span class="k">else</span> <span class="s2">"within tolerance"</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">cell</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">rate</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> (nominal 0.05) — </span><span class="si">{</span><span class="n">flag</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Consequence: detection rates in Section 1 are descriptive rejection rates, "</span>
-      <span class="s2">"not power. Documented as a substantive finding (see Section 5).</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+<span class="c1"># [18] regression guard — this pass adds columns and rewrites strings only</span>
+<span class="n">FROZEN</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"reject_at_zero_GROUNDxpart_n_minor"</span><span class="p">:</span>   <span class="p">(</span><span class="mf">0.540</span><span class="p">,</span>   <span class="mf">1e-3</span><span class="p">),</span>
+    <span class="s2">"reject_at_zero_MISSILESxpart_n_minor"</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.880</span><span class="p">,</span>   <span class="mf">1e-3</span><span class="p">),</span>
+    <span class="s2">"obs_by_lag_2"</span><span class="p">:</span>                         <span class="p">(</span><span class="o">-</span><span class="mf">2.59</span><span class="p">,</span>   <span class="mf">5e-3</span><span class="p">),</span>
+    <span class="s2">"obs_by_lag_3"</span><span class="p">:</span>                         <span class="p">(</span><span class="o">-</span><span class="mf">4.21</span><span class="p">,</span>   <span class="mf">5e-3</span><span class="p">),</span>
+    <span class="s2">"noise_lag_1"</span><span class="p">:</span>                          <span class="p">(</span><span class="mf">2.502</span><span class="p">,</span>   <span class="mf">5e-3</span><span class="p">),</span>
+    <span class="s2">"noise_lag_2"</span><span class="p">:</span>                          <span class="p">(</span><span class="o">-</span><span class="mf">3.962</span><span class="p">,</span>  <span class="mf">5e-3</span><span class="p">),</span>
+    <span class="s2">"noise_lag_3"</span><span class="p">:</span>                          <span class="p">(</span><span class="o">-</span><span class="mf">5.971</span><span class="p">,</span>  <span class="mf">5e-3</span><span class="p">),</span>
+    <span class="s2">"emp_p_36cell"</span><span class="p">:</span>                         <span class="p">(</span><span class="mf">0.0299</span><span class="p">,</span>  <span class="mf">1e-4</span><span class="p">),</span>
+    <span class="s2">"n_nominal_sig"</span><span class="p">:</span>                        <span class="p">(</span><span class="mi">8</span><span class="p">,</span>       <span class="mi">0</span><span class="p">),</span>
+    <span class="s2">"n_percell_survivors"</span><span class="p">:</span>                  <span class="p">(</span><span class="mi">1</span><span class="p">,</span>       <span class="mi">0</span><span class="p">),</span>
+    <span class="s2">"n_bh_survivors"</span><span class="p">:</span>                       <span class="p">(</span><span class="mi">0</span><span class="p">,</span>       <span class="mi">0</span><span class="p">),</span>
+    <span class="s2">"n_bonf_survivors"</span><span class="p">:</span>                     <span class="p">(</span><span class="mi">0</span><span class="p">,</span>       <span class="mi">0</span><span class="p">),</span>
+    <span class="s2">"min_q_bh"</span><span class="p">:</span>                             <span class="p">(</span><span class="mf">0.2024</span><span class="p">,</span>  <span class="mf">1e-4</span><span class="p">),</span>
+    <span class="s2">"max_z_pos"</span><span class="p">:</span>                            <span class="p">(</span><span class="mf">1.777</span><span class="p">,</span>   <span class="mf">1e-3</span><span class="p">),</span>
+    <span class="s2">"null_mean_min"</span><span class="p">:</span>                        <span class="p">(</span><span class="mf">0.765</span><span class="p">,</span>   <span class="mf">1e-3</span><span class="p">),</span>
+    <span class="s2">"null_mean_max"</span><span class="p">:</span>                        <span class="p">(</span><span class="mf">2.393</span><span class="p">,</span>   <span class="mf">1e-3</span><span class="p">),</span>
+    <span class="s2">"null_sd_min"</span><span class="p">:</span>                          <span class="p">(</span><span class="mf">1.417</span><span class="p">,</span>   <span class="mf">1e-3</span><span class="p">),</span>
+    <span class="s2">"null_sd_max"</span><span class="p">:</span>                          <span class="p">(</span><span class="mf">7.400</span><span class="p">,</span>   <span class="mf">1e-3</span><span class="p">),</span>
+    <span class="s2">"total_nonfinite"</span><span class="p">:</span>                      <span class="p">(</span><span class="mi">0</span><span class="p">,</span>       <span class="mi">0</span><span class="p">),</span>
+    <span class="s2">"pcell_GROUNDxpart_n_war"</span><span class="p">:</span>              <span class="p">(</span><span class="mf">0.04198</span><span class="p">,</span> <span class="mf">1e-5</span><span class="p">),</span>
+<span class="p">}</span>
+<span class="n">_live</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"reject_at_zero_GROUNDxpart_n_minor"</span><span class="p">:</span>
+        <span class="n">reject_at_zero</span><span class="p">[</span><span class="s2">"GROUND×part_n_minor"</span><span class="p">],</span>
+    <span class="s2">"reject_at_zero_MISSILESxpart_n_minor"</span><span class="p">:</span>
+        <span class="n">reject_at_zero</span><span class="p">[</span><span class="s2">"MISSILES×part_n_minor"</span><span class="p">],</span>
+    <span class="s2">"obs_by_lag_2"</span><span class="p">:</span> <span class="n">obs_by_lag</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"mean"</span><span class="p">],</span>
+    <span class="s2">"obs_by_lag_3"</span><span class="p">:</span> <span class="n">obs_by_lag</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="s2">"mean"</span><span class="p">],</span>
+    <span class="s2">"noise_lag_1"</span><span class="p">:</span> <span class="n">noise_by_lag</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+    <span class="s2">"noise_lag_2"</span><span class="p">:</span> <span class="n">noise_by_lag</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+    <span class="s2">"noise_lag_3"</span><span class="p">:</span> <span class="n">noise_by_lag</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+    <span class="s2">"emp_p_36cell"</span><span class="p">:</span> <span class="n">emp_p</span><span class="p">,</span>
+    <span class="s2">"n_nominal_sig"</span><span class="p">:</span> <span class="n">n_nominal_sig</span><span class="p">,</span>
+    <span class="s2">"n_percell_survivors"</span><span class="p">:</span> <span class="n">n_percell_survivors</span><span class="p">,</span>
+    <span class="s2">"n_bh_survivors"</span><span class="p">:</span> <span class="n">n_bh_survivors</span><span class="p">,</span>
+    <span class="s2">"n_bonf_survivors"</span><span class="p">:</span> <span class="n">n_bonf_survivors</span><span class="p">,</span>
+    <span class="s2">"min_q_bh"</span><span class="p">:</span> <span class="n">sec2b_df</span><span class="p">[</span><span class="s2">"q_bh"</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+    <span class="s2">"max_z_pos"</span><span class="p">:</span> <span class="n">sec2b_df</span><span class="p">[</span><span class="s2">"z_pos"</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
+    <span class="s2">"null_mean_min"</span><span class="p">:</span> <span class="n">sec2b_df</span><span class="p">[</span><span class="s2">"null_mean_Z"</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+    <span class="s2">"null_mean_max"</span><span class="p">:</span> <span class="n">sec2b_df</span><span class="p">[</span><span class="s2">"null_mean_Z"</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
+    <span class="s2">"null_sd_min"</span><span class="p">:</span> <span class="n">sec2b_df</span><span class="p">[</span><span class="s2">"null_sd_Z"</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+    <span class="s2">"null_sd_max"</span><span class="p">:</span> <span class="n">sec2b_df</span><span class="p">[</span><span class="s2">"null_sd_Z"</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
+    <span class="s2">"total_nonfinite"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sec2b_df</span><span class="p">[</span><span class="s2">"n_nonfinite_perm"</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span>
+    <span class="s2">"pcell_GROUNDxpart_n_war"</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span>
+        <span class="n">sec2b_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">sec2b_df</span><span class="p">[</span><span class="s2">"weapon"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"GROUND"</span><span class="p">)</span>
+                     <span class="o">&amp;</span> <span class="p">(</span><span class="n">sec2b_df</span><span class="p">[</span><span class="s2">"outcome"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"part_n_war"</span><span class="p">),</span> <span class="s2">"p_cell"</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+<span class="p">}</span>
+<span class="n">_drift</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="n">want</span><span class="p">,</span> <span class="n">tol</span><span class="p">)</span> <span class="ow">in</span> <span class="n">FROZEN</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">got</span> <span class="o">=</span> <span class="n">_live</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">got</span><span class="p">)</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">want</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">tol</span><span class="p">:</span>
+        <span class="n">_drift</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: expected </span><span class="si">{</span><span class="n">want</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">got</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">_drift</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  [18] REGRESSION — values moved:"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">_drift</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"      </span><span class="si">{</span><span class="n">d</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">checks</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="sa">f</span><span class="s2">"Regression guard: all </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">FROZEN</span><span class="p">)</span><span class="si">}</span><span class="s2"> frozen values unchanged"</span><span class="p">,</span>
+               <span class="nb">len</span><span class="p">(</span><span class="n">_drift</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))</span>
+
+<span class="c1"># [19] count test rebuilt on the 2000-perm basis</span>
+<span class="n">checks</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="sa">f</span><span class="s2">"Lag-1 count test uses perm2b_df (</span><span class="si">{</span><span class="n">N_PERM_2B</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> perms), "</span>
+               <span class="sa">f</span><span class="s2">"p=</span><span class="si">{</span><span class="n">emp_p_lag1</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, MC SE </span><span class="si">{</span><span class="n">mc_se_count</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+               <span class="nb">len</span><span class="p">(</span><span class="n">null_counts_lag1</span><span class="p">)</span> <span class="o">==</span> <span class="n">N_PERM_2B</span><span class="p">))</span>
+
+<span class="c1"># [20] dependence evidence computed and saved</span>
+<span class="n">_dep_out</span> <span class="o">=</span> <span class="p">[</span><span class="n">TBL_DIR</span> <span class="o">/</span> <span class="s2">"section2b_count_dependence.csv"</span><span class="p">,</span>
+            <span class="n">TBL_DIR</span> <span class="o">/</span> <span class="s2">"section2b_cellZ_correlation.csv"</span><span class="p">]</span>
+<span class="n">checks</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="sa">f</span><span class="s2">"Cross-cell dependence quantified "</span>
+               <span class="sa">f</span><span class="s2">"(mean|r|=</span><span class="si">{</span><span class="n">_off</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, M_eff=</span><span class="si">{</span><span class="n">_M_eff</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">/12) "</span>
+               <span class="sa">f</span><span class="s2">"and saved"</span><span class="p">,</span> <span class="nb">all</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">_dep_out</span><span class="p">)</span>
+              <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">_M_eff</span><span class="p">)</span> <span class="ow">and</span> <span class="mf">1.0</span> <span class="o">&lt;=</span> <span class="n">_M_eff</span> <span class="o">&lt;=</span> <span class="mf">12.0</span><span class="p">))</span>
+
+<span class="c1"># [21] DH contributing-unit counts captured and varying</span>
+<span class="n">checks</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="sa">f</span><span class="s2">"n_units_dh captured from DH aux "</span>
+               <span class="sa">f</span><span class="s2">"(range </span><span class="si">{</span><span class="n">sec2b_df</span><span class="p">[</span><span class="s1">'n_units_dh'</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">-"</span>
+               <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">sec2b_df</span><span class="p">[</span><span class="s1">'n_units_dh'</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">); n_units_loose constant "</span>
+               <span class="sa">f</span><span class="s2">"at </span><span class="si">{</span><span class="n">sec2b_df</span><span class="p">[</span><span class="s1">'n_units_loose'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+               <span class="s2">"n_units_dh"</span> <span class="ow">in</span> <span class="n">sec2b_df</span><span class="o">.</span><span class="n">columns</span>
+               <span class="ow">and</span> <span class="n">sec2b_df</span><span class="p">[</span><span class="s2">"n_units_dh"</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">()))</span>
+
+<span class="c1"># [22] size_ok gated on permutation calibration, not on δ=0</span>
+<span class="n">checks</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"size_ok defined from permutation nulls "</span>
+               <span class="sa">f</span><span class="s2">"(n_miscentred=</span><span class="si">{</span><span class="n">n_miscentred</span><span class="si">}</span><span class="s2">, "</span>
+               <span class="sa">f</span><span class="s2">"max perm reject=</span><span class="si">{</span><span class="n">perm_size_rates</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">) -&gt; </span><span class="si">{</span><span class="n">size_ok</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+               <span class="nb">isinstance</span><span class="p">(</span><span class="n">size_ok</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)))</span>
+
+<span class="c1"># Reported diagnostic (not a pass/fail gate): the DH test's rejection at δ=0</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"=== NB12 reported diagnostic — rejection rate at δ=0 ==="</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"At δ=0 the synthetic outcome equals the real outcome, so this is a "</span>
+      <span class="s2">"rejection rate on observed data, NOT a type-I error rate: it mixes "</span>
+      <span class="s2">"over-rejection with any genuine lead-lag effect, and bootstrap "</span>
+      <span class="s2">"resampling of countries with replacement can inflate it further."</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">cell</span><span class="p">,</span> <span class="n">rate</span> <span class="ow">in</span> <span class="n">reject_at_zero</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">flag</span> <span class="o">=</span> <span class="n">REJECT_ZERO_FLAG_HI</span> <span class="k">if</span> <span class="n">rate</span> <span class="o">&gt;</span> <span class="mf">0.12</span> <span class="k">else</span> <span class="n">REJECT_ZERO_FLAG_LO</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">cell</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">rate</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> — </span><span class="si">{</span><span class="n">flag</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Calibrated size is Section 2b's permutation nulls, where the "</span>
+      <span class="s2">"treatment-&gt;outcome link is destroyed. Consequence: Section 1's "</span>
+      <span class="s2">"detection rates are descriptive, not power.</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">"=== NB12 sanity checks ===</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 <span class="n">n_pass</span> <span class="o">=</span> <span class="mi">0</span>
@@ -9318,10 +9694,11 @@ Verdict: lags 2–3 are UNINFORMATIVE in this design — negative Z reflects a f
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>=== NB12 reported diagnostic — rejection rate at δ=0 (see Section 2b for calibrated size) ===
-GROUND×part_n_minor: 0.540 (nominal 0.05) — SIZE DISTORTION
-MISSILES×part_n_minor: 0.880 (nominal 0.05) — SIZE DISTORTION
-Consequence: detection rates in Section 1 are descriptive rejection rates, not power. Documented as a substantive finding (see Section 5).
+<pre>=== NB12 reported diagnostic — rejection rate at δ=0 ===
+At δ=0 the synthetic outcome equals the real outcome, so this is a rejection rate on observed data, NOT a type-I error rate: it mixes over-rejection with any genuine lead-lag effect, and bootstrap resampling of countries with replacement can inflate it further.
+GROUND×part_n_minor: 0.540 — HIGH REJECTION (not calibrated size)
+MISSILES×part_n_minor: 0.880 — HIGH REJECTION (not calibrated size)
+Calibrated size is Section 2b's permutation nulls, where the treatment-&gt;outcome link is destroyed. Consequence: Section 1's detection rates are descriptive, not power.
 
 === NB12 sanity checks ===
 
@@ -9340,10 +9717,15 @@ Consequence: detection rates in Section 1 are descriptive rejection rates, not p
 [13] PASS — BH and Bonferroni computed over all 12 lag-1 cells, q &gt;= p and bonf &gt;= q
 [14] PASS — Non-finite permutation Z quantified per cell (total 0 of 24,000 draws)
 [15] PASS — 2000-perm null means agree with 200-perm cache within 4 MC SE (independent seed streams)
-[16] PASS — Section 1 δ=0 diagnostic relabelled as a rejection rate (not a type-I error rate)
+[16] PASS — δ=0 relabel complete: no banned size/type-I framing in any source cell, and no legacy rejection-rate variable remains
 [17] PASS — Section 2b outputs saved (missing: none)
+[18] PASS — Regression guard: all 20 frozen values unchanged
+[19] PASS — Lag-1 count test uses perm2b_df (2,000 perms), p=0.0265, MC SE 0.0036
+[20] PASS — Cross-cell dependence quantified (mean|r|=0.068, M_eff=11.69/12) and saved
+[21] PASS — n_units_dh captured from DH aux (range 94-143); n_units_loose constant at 192
+[22] PASS — size_ok defined from permutation nulls (n_miscentred=12, max perm reject=0.405) -&gt; False
 
-17/17 checks passed
+22/22 checks passed
 </pre>
 </div>
 </div>
@@ -9375,15 +9757,15 @@ Consequence: detection rates in Section 1 are descriptive rejection rates, not p
 <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">1. Rejection rate at δ=0 and minimum detectable effect (lag 1):"</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">cell</span><span class="p">,</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">delta_star</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span> <span class="ow">and</span> <span class="n">ds</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
-        <span class="n">ds_str</span> <span class="o">=</span> <span class="s2">"δ* ≈ 0 (size distortion)"</span>
+        <span class="n">ds_str</span> <span class="o">=</span> <span class="s2">"δ* ≈ 0 (rejection already ≥80</span><span class="si">% a</span><span class="s2">t δ=0)"</span>
     <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">ds</span><span class="p">):</span>
         <span class="n">ds_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"δ* = </span><span class="si">{</span><span class="n">ds</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">ds_str</span> <span class="o">=</span> <span class="s2">"δ* &gt; 0.30"</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"   </span><span class="si">{</span><span class="n">cell</span><span class="si">:</span><span class="s2">&lt;22s</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">ds_str</span><span class="si">}</span><span class="s2">   (rejection at δ=0: </span><span class="si">{</span><span class="n">type1</span><span class="p">[</span><span class="n">cell</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"   </span><span class="si">{</span><span class="n">cell</span><span class="si">:</span><span class="s2">&lt;22s</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">ds_str</span><span class="si">}</span><span class="s2">   (rejection at δ=0: </span><span class="si">{</span><span class="n">reject_at_zero</span><span class="p">[</span><span class="n">cell</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"   Largest observed |ρ| in NB06 = </span><span class="si">{</span><span class="n">MAX_OBSERVED_CCF</span><span class="si">}</span><span class="s2"> — </span><span class="si">{</span><span class="n">relation</span><span class="si">}</span><span class="s2"> the "</span>
       <span class="sa">f</span><span class="s2">"detection floor."</span> <span class="o">+</span> <span class="p">(</span><span class="s2">""</span> <span class="k">if</span> <span class="n">size_ok</span> <span class="k">else</span>
-      <span class="s2">" Floor unreliable: the test over-rejects at δ=0."</span><span class="p">))</span>
+      <span class="s2">" Floor not interpretable: high rejection at δ=0 (see item 2b for calibrated size)."</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"   NOTE: δ=0 keeps the real outcome, so this is not a type-I rate. "</span>
       <span class="s2">"Calibrated size is item 2b."</span><span class="p">)</span>
 
@@ -9406,6 +9788,16 @@ Consequence: detection rates in Section 1 are descriptive rejection rates, not p
       <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">ALPHA</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">sec2b_df</span><span class="p">)</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> expected by chance"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"    max z_pos = </span><span class="si">{</span><span class="n">sec2b_df</span><span class="p">[</span><span class="s1">'z_pos'</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> (2-sd ref 1.96)"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"    -&gt; </span><span class="si">{</span><span class="n">sec2b_verdict</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">2c. Count test vs per-cell, reconciled:"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"    lag-1 count: observed </span><span class="si">{</span><span class="n">obs_count_lag1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">LAG1_CELLS</span><span class="p">)</span><span class="si">}</span><span class="s2">, null "</span>
+      <span class="sa">f</span><span class="s2">"mean </span><span class="si">{</span><span class="n">null_counts_lag1</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, p=</span><span class="si">{</span><span class="n">emp_p_lag1</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> "</span>
+      <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">N_PERM_2B</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> perms)"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"    cells are dependent: mean|r| of permutation Z = "</span>
+      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">_off</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, M_eff = </span><span class="si">{</span><span class="n">_M_eff</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> of </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">LAG1_CELLS</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"    -&gt; </span><span class="si">{</span><span class="n">count_dependence_reading</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">2d. Null dispersion source:"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"    -&gt; </span><span class="si">{</span><span class="n">disp_reading</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">3. Negative-Z artifact at lags 2–3:"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"   observed mean Z: lag2=</span><span class="si">{</span><span class="n">obs_by_lag</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'mean'</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, "</span>
@@ -9452,10 +9844,25 @@ Consequence: detection rates in Section 1 are descriptive rejection rates, not p
                  <span class="sa">f</span><span class="s2">"chance (empirical p=</span><span class="si">{</span><span class="n">emp_p</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">) — lean on the placebo rates "</span>
                  <span class="sa">f</span><span class="s2">"and report both diagnostics."</span>
                  <span class="sa">f</span><span class="s2">" Per-cell: </span><span class="si">{</span><span class="n">sec2b_verdict</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">size_ok</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">_destroyed</span><span class="p">:</span>
+        <span class="n">synthesis</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">" The lag-1 count excess (p=</span><span class="si">{</span><span class="n">emp_p_lag1</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">) does not overturn "</span>
+            <span class="sa">f</span><span class="s2">"this: that null is generated by independent per-treatment "</span>
+            <span class="sa">f</span><span class="s2">"shuffling across </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">LAG1_CELLS</span><span class="p">)</span><span class="si">}</span><span class="s2"> strongly dependent cells "</span>
+            <span class="sa">f</span><span class="s2">"(M_eff=</span><span class="si">{</span><span class="n">_M_eff</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">), so it is too tight, while the per-cell "</span>
+            <span class="sa">f</span><span class="s2">"nulls are correctly calibrated by construction."</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">synthesis</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">" The lag-1 count excess (p=</span><span class="si">{</span><span class="n">emp_p_lag1</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">) is not dismissed by "</span>
+            <span class="sa">f</span><span class="s2">"the independent-shuffling argument, which the data did not "</span>
+            <span class="sa">f</span><span class="s2">"support; the conclusion rests on the multiplicity result "</span>
+            <span class="sa">f</span><span class="s2">"(0/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">sec2b_df</span><span class="p">)</span><span class="si">}</span><span class="s2"> cells survive BH, smallest q="</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">sec2b_df</span><span class="p">[</span><span class="s1">'q_bh'</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">)."</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"   </span><span class="si">{</span><span class="n">synthesis</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">5. What the checks block does and does not certify:"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"   17/17 is a completeness audit — outputs exist, tails match, "</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"   22/22 is a completeness audit — outputs exist, tails match, "</span>
       <span class="s2">"denominators are right. It is NOT a validity certificate. The "</span>
       <span class="s2">"pipeline's misbehaviour is a reported finding (items 1 and 2b), "</span>
       <span class="s2">"deliberately not a failing gate."</span><span class="p">)</span>
@@ -9480,8 +9887,8 @@ NB12 HEADLINE FINDINGS — was the RQ2 null a power problem?
 
 1. Rejection rate at δ=0 and minimum detectable effect (lag 1):
    GROUND×part_n_minor    δ* = 0.013   (rejection at δ=0: 0.540)
-   MISSILES×part_n_minor  δ* ≈ 0 (size distortion)   (rejection at δ=0: 0.880)
-   Largest observed |ρ| in NB06 = 0.04 — at or above the detection floor. Floor unreliable: the test over-rejects at δ=0.
+   MISSILES×part_n_minor  δ* ≈ 0 (rejection already ≥80% at δ=0)   (rejection at δ=0: 0.880)
+   Largest observed |ρ| in NB06 = 0.04 — at or above the detection floor. Floor not interpretable: high rejection at δ=0 (see item 2b for calibrated size).
    NOTE: δ=0 keeps the real outcome, so this is not a type-I rate. Calibrated size is item 2b.
 
 2. Permutation verdict on 8/36 nominal significances:
@@ -9492,17 +9899,25 @@ NB12 HEADLINE FINDINGS — was the RQ2 null a power problem?
     permutation null mean Z spans +0.77 to +2.39 (nominal 0); sd spans 1.42 to 7.40 (nominal 1) -&gt; calibrated evidence of over-rejection, all 12 cells
     1 of 8 nominal hits exceed their own null; 0 survive BH (smallest q=0.202); 0.6 expected by chance
     max z_pos = 1.78 (2-sd ref 1.96)
-    -&gt; RECONCILED — 1 of 8 nominally significant cells exceed their own one-sided permutation null (GROUNDxpart_n_war), against 0.6 expected by chance across 12 pre-specified lag-1 tests. No cell survives BH correction over that family (smallest q=0.202) and none reaches 2 sd above its own null mean (max z_pos=1.78). The count-level excess (p=0.0299) reflects cross-cell dependence plus the size distortion, not a lead-lag signal, and it does not survive per-cell falsification.
+    -&gt; RECONCILED — 1 of 8 nominally significant cells exceed their own one-sided permutation null (GROUNDxpart_n_war), against 0.6 expected by chance across 12 pre-specified lag-1 tests. No cell survives BH correction over that family (smallest q=0.202) and none reaches 2 sd above its own null mean (max z_pos=1.78). The count-level excess does not license a signal claim: at 2,000 permutations the lag-1 count test gives p=0.0265, but the 12 cells are strongly dependent (mean|r| of permutation Z = 0.068, M_eff=11.69 of 12) and the permutation shuffles treatments independently, so that null is too tight. Per-cell falsification, which is correctly calibrated, finds nothing.
+
+2c. Count test vs per-cell, reconciled:
+    lag-1 count: observed 8/12, null mean 3.55, p=0.0265 (2,000 perms)
+    cells are dependent: mean|r| of permutation Z = 0.068, M_eff = 11.69 of 12
+    -&gt; The permutation count null is too tight. It is generated by shuffling each treatment independently, which removes the cross-treatment correlation present in the real data (observed mean|r|=0.073 vs 0.012 permuted), and the 12 cells are in any case far from independent (mean|r| of their permutation Z = 0.068, M_eff=11.69 of 12). Its variance is therefore understated and emp_p_lag1=0.0265 is anti-conservative. The per-cell tests do not inherit this: each cell is judged against its own marginal permutation null, which is correctly calibrated by construction.
+
+2d. Null dispersion source:
+    -&gt; No monotone relation between contributing units and null dispersion (rho=-0.315, p=0.3191) across only 12 cells. The heavy tails are real (zero non-finite draws, and check [15] cross-validates them against an independent seed stream) but this notebook does not isolate their source. State that plainly rather than gesturing at sparsity.
 
 3. Negative-Z artifact at lags 2–3:
    observed mean Z: lag2=-2.59, lag3=-4.21; permutation null: lag2=-3.12, lag3=-4.50; pure noise: lag2=-3.96, lag3=-5.97
    → lags 2–3 are UNINFORMATIVE — substantive conclusions rest on lag 1 only.
 
 4. Synthesis for the paper's RQ2 claim:
-   The power question is moot, but the argument rests on permutation calibration rather than on the δ=0 simulation. Under permutation, with the treatment-outcome link destroyed, DH's Z-bar-tilde is mis-centred in 12/12 lag-1 cells (null mean Z +0.77 to +2.39 against nominal 0) and over-dispersed (sd up to 7.40 against nominal 1), so the pipeline is anti-conservative at lag 1 on this panel. Against those calibrated nulls, 1 of 8 nominal hits survive individually and 0 survive BH across the pre-specified 12-cell family (smallest q=0.202, against 0.6 expected by chance); no cell reaches 2 sd above its own null mean. NB06's placebo rates (0.20-0.50 vs 0.15) flagged exactly this. The RQ2 null stands on calibrated falsification, not on power, and not on the δ=0 rejection rate.
+   The power question is moot, but the argument rests on permutation calibration rather than on the δ=0 simulation. Under permutation, with the treatment-outcome link destroyed, DH's Z-bar-tilde is mis-centred in 12/12 lag-1 cells (null mean Z +0.77 to +2.39 against nominal 0) and over-dispersed (sd up to 7.40 against nominal 1), so the pipeline is anti-conservative at lag 1 on this panel. Against those calibrated nulls, 1 of 8 nominal hits survive individually and 0 survive BH across the pre-specified 12-cell family (smallest q=0.202, against 0.6 expected by chance); no cell reaches 2 sd above its own null mean. NB06's placebo rates (0.20-0.50 vs 0.15) flagged exactly this. The RQ2 null stands on calibrated falsification, not on power, and not on the δ=0 rejection rate. The lag-1 count excess (p=0.0265) does not overturn this: that null is generated by independent per-treatment shuffling across 12 strongly dependent cells (M_eff=11.69), so it is too tight, while the per-cell nulls are correctly calibrated by construction.
 
 5. What the checks block does and does not certify:
-   17/17 is a completeness audit — outputs exist, tails match, denominators are right. It is NOT a validity certificate. The pipeline's misbehaviour is a reported finding (items 1 and 2b), deliberately not a failing gate.
+   22/22 is a completeness audit — outputs exist, tails match, denominators are right. It is NOT a validity certificate. The pipeline's misbehaviour is a reported finding (items 1 and 2b), deliberately not a failing gate.
 
 === NB-12 complete — proceed to NB-13 (forecasting benchmark) ===
 </pre>

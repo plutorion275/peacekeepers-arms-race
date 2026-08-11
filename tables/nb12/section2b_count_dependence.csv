@@ -1,0 +1,11 @@
+metric,value
+obs_count_lag1,8.0
+null_mean,3.554
+null_sd,1.870784305300448
+emp_p_lag1,0.026486756621689155
+mc_se,0.0035906272672997235
+n_perm,2000.0
+mean_abs_r_cellZ,0.06782003085591269
+M_eff,11.688842857260202
+obs_treat_mean_abs_r,0.07338021545468977
+perm_treat_mean_abs_r,0.01240657026206743
