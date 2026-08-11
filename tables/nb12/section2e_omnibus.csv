@@ -1,0 +1,12 @@
+test,value
+fisher_stat,37.66515631297705
+fisher_p_asymptotic,0.03750848204725021
+fisher_p_permutation,0.0704647676161919
+simes_p,0.20241
+simes_p_permutation,0.18690654672663667
+binomial_p,0.45963991233736307
+ks_D,0.3478266666666666
+ks_p,0.084165919710254
+n_below_alpha,1.0
+count_test_p,0.026486756621689155
+n_perm,2000.0

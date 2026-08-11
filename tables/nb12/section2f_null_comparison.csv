@@ -1,0 +1,12 @@
+metric,value
+obs_count_lag1,8.0
+shuffle_null_mean,3.554
+shuffle_null_sd,1.870784305300448
+shuffle_p,0.026486756621689155
+circshift_null_mean,4.8695
+circshift_null_sd,2.0053629323005655
+circshift_p,0.09745127436281859
+acf_observed,-0.3285684895508274
+acf_shuffled,-0.02316062678812502
+acf_circular,-0.31134041789133554
+n_perm,2000.0
