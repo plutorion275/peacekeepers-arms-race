@@ -1,0 +1,10 @@
+# pair diagnostics
+weapon,outcome,null_mean_Z_shuffle,null_sd_Z_shuffle,cs_null_mean_Z,cs_null_sd_Z,p_cell,p_cell_cs,n_units_dh,frac_zero_var,r_shuffle,r_circular
+GROUND,part_n_extraterritorial,2.393,7.274,2.2387,6.5663,0.06747,0.06997,132,0.2864583333333333,0.9511390629212728,0.9447019521968262
+GROUND,part_n_war,2.228,7.3997,2.379,6.7108,0.04198,0.03248,123,0.328125,0.9511390629212728,0.9447019521968262
+
+# collapsed aggregates
+family,n_cells,bh_min_q,fisher_p,count_p
+full_12,12,0.3898,0.18290854572713644,0.09745127436281859
+collapsed_11,11,0.35728,0.2783608195902049,0.14042978510744628
+dropped_10,10,0.6521666666666667,0.4917541229385307,0.21739130434782608
