@@ -1,4 +1,4 @@
-# Data — never commit these
+# Data — raw and intermediate files are never committed (see data/README.md)
 data/raw/
 data/checkpoints/
 data/clean/
@@ -17,10 +17,9 @@ venv/
 .vscode/
 .idea/
 
-# Outputs that get regenerated
-figures/*.png
-figures/*.pdf
-!figures/.gitkeep
-
-# Project-specific: raw source data (not redistributed — see data/README.md)
-data/raw/
+# NOTE: figures/ and tables/ are intentionally committed (not ignored) so
+# results are browsable without re-running the notebooks. If you want to
+# stop tracking generated plots/tables in the future, add rules like
+# `figures/**/*.png` and `tables/**/*.csv` here — the simple top-level
+# `figures/*.png` pattern does NOT match the per-notebook subfolders
+# actually used in this repo, so it would silently do nothing.
