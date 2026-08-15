@@ -206,6 +206,8 @@ Ben-Hur, A., Elisseeff, A., & Guyon, I. (2002). A stability based method for dis
 
 Benjamini, Y., & Hochberg, Y. (1995). Controlling the false discovery rate: A practical and powerful approach to multiple testing. *Journal of the Royal Statistical Society: Series B (Methodological)*, 57(1), 289–300.
 
+Davis, T. S. (2026). The Peacekeepers' Arms Race: Testing the Stability-Instability Paradox in Cross-National Conflict Data, 1946-2024 (v1.0.0) [Data set and software]. Zenodo. https://doi.org/10.5281/zenodo.21947819
+
 Dumitrescu, E.-I., & Hurlin, C. (2012). Testing for Granger non-causality in heterogeneous panels. *Economic Modelling*, 29(4), 1450–1460.
 
 Jervis, R. (1984). *The Illogic of American Nuclear Strategy*. Cornell University Press.
@@ -238,7 +240,7 @@ World Bank. World Development Indicators. [ADD CITATION: exact World Bank WDI ci
 
 ## Data Availability / Replication Statement
 
-All analysis code is available in the project's GitHub repository. Raw data are not redistributed in the repository, in keeping with the licensing terms of each source dataset; each source's download location and license terms are documented in the repository's `data/README.md`, and the analysis pipeline expects raw files to be placed into the directory layout described there before the notebooks are run. Notebooks are numbered for sequential execution order from data acquisition through final synthesis; running them in numeric order reproduces every table and figure cited in this paper from the same raw inputs.
+All analysis code is permanently archived at https://doi.org/10.5281/zenodo.21947819 (Davis, 2026), a frozen snapshot corresponding to the results reported in this paper; the actively maintained repository is available at https://github.com/plutorion275/peacekeepers-arms-race for any subsequent updates. Raw data are not redistributed in the repository, in keeping with the licensing terms of each source dataset; each source's download location and license terms are documented in the repository's `data/README.md`, and the analysis pipeline expects raw files to be placed into the directory layout described there before the notebooks are run. Notebooks are numbered for sequential execution order from data acquisition through final synthesis; running them in numeric order reproduces every table and figure cited in this paper from the same raw inputs.
 
 ## Author Statement
 

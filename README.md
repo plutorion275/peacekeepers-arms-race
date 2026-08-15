@@ -2,6 +2,8 @@
 
 **Testing the Stability–Instability Paradox with cross-national panel data, 1946–2024**
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21947819.svg)](https://doi.org/10.5281/zenodo.21947819)
+
 A quantitative panel-data study asking whether higher military capability shifts conflict composition toward low-intensity forms (the *substitution hypothesis*) or amplifies all conflict types (*amplification*). Originally a course project for PMDS507L (Big Data Analytics), now on a journal-submission track.
 
 **Author:** T Sam Davis
@@ -128,9 +130,12 @@ Code in this repository is released under the [MIT License](LICENSE). Third-part
 
 ## Citation
 
-If you use this code or findings, please cite (see also `CITATION.cff`):
+If you use this code or findings, please cite the archived DOI as the primary reference (see also `CITATION.cff`):
 
 ```
 Davis, T. S. (2026). The Peacekeepers' Arms Race: Testing the Stability-Instability
-Paradox in Cross-National Conflict Data, 1946-2024. [Working paper].
+Paradox in Cross-National Conflict Data, 1946-2024 (v1.0.0) [Data set and software].
+Zenodo. https://doi.org/10.5281/zenodo.21947819
 ```
+
+For the actively maintained working code (post-v1.0.0 updates), see the GitHub repository: https://github.com/plutorion275/peacekeepers-arms-race

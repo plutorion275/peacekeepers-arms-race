@@ -6,6 +6,12 @@ authors:
   - family-names: "Davis"
     given-names: "T Sam"
 repository-code: "https://github.com/plutorion275/peacekeepers-arms-race"
+doi: 10.5281/zenodo.21947819
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.21947819
+    description: "Archived snapshot of version v1.0.0, the version this DOI covers."
+version: v1.0.0
 abstract: >-
   A quantitative panel-data study testing the Stability-Instability
   Paradox across 192 countries (1946-2024): whether higher military
