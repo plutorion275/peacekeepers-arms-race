@@ -60,8 +60,9 @@ peacekeepers-arms-race/
 │   ├── 09_secondary_findings.ipynb
 │   ├── 10_alliance_grouped_analysis.ipynb
 │   ├── 11_mechanisms.ipynb
-│   └── 12_rq2_power_analysis.ipynb
-│       # 13 (forecasting benchmark) and 14 (naive vs. rigorous comparison) are planned, not yet built
+│   ├── 12_rq2_power_analysis.ipynb
+│   ├── 13_rq2_forecasting_benchmark.ipynb
+│   └── 14_naive_vs_rigorous_comparison.ipynb
 ├── src/                     # Shared modules imported by all notebooks
 │   ├── config.py
 │   ├── iso3.py
@@ -106,7 +107,7 @@ pip install -r requirements.txt
 
 Tested against Python 3.14 (see `.python-version`). Run `pytest tests/` to validate the shared ISO3-resolution logic independently of the notebooks.
 
-Then follow `data/README.md` to download raw source files (SIPRI, UCDP, World Bank, V-Dem, CoW) into `data/raw/`, and run notebooks 00→12 in order.
+Then follow `data/README.md` to download raw source files (SIPRI, UCDP, World Bank, V-Dem, CoW) into `data/raw/`, and run notebooks 00→14 in order.
 
 ## Key methodological choices
 
