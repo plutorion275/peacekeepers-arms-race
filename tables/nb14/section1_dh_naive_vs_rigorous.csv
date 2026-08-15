@@ -1,0 +1,13 @@
+weapon,outcome,naive_p,naive_sig,rigorous_p,rigorous_q_bh,rigorous_sig_bh
+GROUND,part_n_war,0.0,True,0.03248,0.3898,False
+MISSILES,part_n_minor,0.0001,True,0.11994,0.4318,False
+NAVAL,part_n_minor,0.0005,True,0.14393,0.4318,False
+GROUND,part_n_extraterritorial,0.0,True,0.06997,0.4198,False
+NAVAL,part_n_extraterritorial,0.0207,True,0.35232,0.587,False
+GROUND,part_n_minor,0.0308,True,0.31834,0.587,False
+MISSILES,part_n_extraterritorial,0.0261,True,0.3913,0.587,False
+MISSILES,part_n_war,0.0147,True,0.38281,0.587,False
+NAVAL,part_n_war,0.1772,False,0.63668,0.764,False
+AIR,part_n_extraterritorial,0.2941,False,0.5957,0.764,False
+AIR,part_n_minor,0.4793,False,0.74813,0.8161,False
+AIR,part_n_war,0.5449,False,0.84458,0.8446,False
