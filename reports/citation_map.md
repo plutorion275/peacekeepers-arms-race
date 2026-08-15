@@ -8,7 +8,7 @@ Format: **"claim as it appears in the paper"** → source file, column/filter.
 
 ## Abstract / Introduction
 
-- **"192-country panel"** → `tables/nb07/section5_centroids_annotated.csv`, sum of `n_countries` (85+118+282+125=610 rows across 4 epochs of a 192-country cross-section); confirmed directly by `data/clean/rq1_panel.parquet` and `data/clean/rq3_cross_section.parquet`, `iso3.nunique()` = 192 in both (NB05/NB07 source panels).
+- **"192-country panel"** → `data/clean/rq1_panel.parquet`, `iso3.nunique()` = 192 (the RQ1/RQ2 merged panel; NB05 source panel). Not the RQ3 clustering sample: `tables/nb07/section5_cluster_assignments.csv` shows the archetype clustering itself draws on 157 countries (`iso3.nunique()` = 157) across 4 epochs (`epoch.nunique()` = 4), yielding 610 country-epoch rows (`len(df)` = 610); the 610 figure in `section5_centroids_annotated.csv`'s `n_countries` sum (85+118+282+125) is a count of country-epoch assignments, not of distinct countries, and should not be read as evidence of a 192-country cross-section.
 - **"1989–2024"** → `data/clean/rq1_panel.parquet`, `year.min()`/`year.max()` = 1989 / 2024.
 - **"nine open ... datasets from five independent providers"** → `reports/draft.md` Section 3.1 table itself (9 rows: SIPRI MILEX, SIPRI TIV, UCDP ACD, UCDP GED, UCDP Dyadic, UCDP BRD, V-Dem, WDI, CoW CINC+Alliances), sourced from BDA_Project_Plan.docx "Datasets" table and `data/README.md` (5 providers: SIPRI, UCDP, V-Dem, World Bank, CoW).
 - **"eight of twelve pre-specified weapon-outcome pairs"** → `tables/nb06/section3_dumitrescu_hurlin.csv`, filtered `lag==1`, count of `p < 0.05` = 8 of 12 rows.
@@ -96,6 +96,7 @@ Format: **"claim as it appears in the paper"** → source file, column/filter.
 - **Armed Instabilizer mean Jaccard = 0.42** → `tables/nb07/section3_bootstrap_summary.csv`, row `cluster==3`, `mean_jaccard` = 0.419 (`cluster 3 = Armed Instabilizer`).
 - **"2 of 4 archetypes clear the corrected bar"** → `tables/nb07/section3_bootstrap_summary.csv`, `mean_jaccard >= 0.50` computed on all 4 rows → 2 True (clusters 1, 2), 2 False (clusters 0, 3).
 - **OOS ANOVA: F=33.6, p<.001, four groups** → `tables/nb07/section4_anova_result.csv`, columns `F_stat` (33.575488), `p_val` (1.100291e-16), `n_groups` (4).
+- **"100 of 157 countries (64%) appear in more than one archetype"** → `tables/nb07/section5_cluster_assignments.csv`, `df.groupby("iso3")["archetype"].nunique()`, count of `> 1` = 100 of `iso3.nunique()` = 157 (100/157 = 63.7%, rounds to 64%).
 
 ## Section 7 — Limitations
 
