@@ -34,7 +34,7 @@ The remainder of the paper proceeds as follows. Section 2 sets out the theoretic
 
 The stability-instability paradox describes a specific, non-obvious relationship between a state's capacity to deter catastrophic war and its willingness to tolerate conflict below that threshold. The term originates with Snyder (1965), who argued that as mutual deterrence capability rises between two actors, the resulting stability at the highest level of potential conflict — neither side rationally initiates a war that both know would be catastrophic — does not translate into stability across the board. Instead, that same high-level deterrence can create room for lower-intensity confrontation, because both sides understand that neither has an incentive to escalate a small conflict into the kind of confrontation that deterrence exists to prevent. The logic is genuinely paradoxical rather than merely counterintuitive: it is not that deterrence *fails* to work at the top of the ladder — by hypothesis it works very well there — but that its success at the top is precisely what removes the main check on behaviour lower down. A state confident that a rival will not escalate a small confrontation into a large one has, in effect, been handed more room to manoeuvre below the threshold that the rival's deterrent actually covers, not less.
 
-Robert Jervis developed a closely related and often-paired argument about the security dilemma and the paradoxical effects of defensive capability more generally [ADD CITATION: full bibliographic reference for the specific Robert Jervis work on the stability-instability paradox / security dilemma that the original project framing draws on — cited by name only in project planning material, without a title or year, and not confidently identifiable from that material alone]. Where Snyder's version of the paradox is framed around mutual deterrence between two roughly matched actors, the Jervis-style security-dilemma framing generalises the underlying mechanism: capability that a state acquires for defensive or deterrent purposes can be read by others as offensive-capable, and can simultaneously alter the acquiring state's own calculus about what level of risk-taking is now tolerable. Both lines of argument converge on the same structural claim that motivates this project — that capability's stabilising and destabilising effects are not independent of each other, they are the *same* mechanism observed at two different rungs of the escalation ladder. Together, Snyder's and Jervis's arguments form the theoretical core of the paradox: capability that stabilises the top of the escalation ladder can destabilise everything beneath it.
+Robert Jervis developed a closely related and often-paired argument about the security dilemma and the paradoxical effects of defensive capability more generally (Jervis, 1984). Where Snyder's version of the paradox is framed around mutual deterrence between two roughly matched actors, the Jervis-style security-dilemma framing generalises the underlying mechanism: capability that a state acquires for defensive or deterrent purposes can be read by others as offensive-capable, and can simultaneously alter the acquiring state's own calculus about what level of risk-taking is now tolerable. Both lines of argument converge on the same structural claim that motivates this project — that capability's stabilising and destabilising effects are not independent of each other, they are the *same* mechanism observed at two different rungs of the escalation ladder. Together, Snyder's and Jervis's arguments form the theoretical core of the paradox: capability that stabilises the top of the escalation ladder can destabilise everything beneath it.
 
 The paradox was developed initially in the context of superpower nuclear deterrence, but its most influential recent empirical tests have come from scholars asking whether it generalises to regional nuclear dyads. Kapur (2008) examines the paradox in South Asia, arguing that the region's stability at the nuclear level has coincided with — and plausibly enabled — a decade of sustained sub-conventional conflict between India and Pakistan. Rauchhaus (2009) undertakes a broader, more systematic empirical re-examination of the paradox across the population of nuclear dyads, providing quantitative grounding for a claim that had previously rested mostly on case-study reasoning. Both studies treat the paradox as operating specifically through nuclear weapons: the capability doing the stabilising work is the capacity for mutually assured destruction, and the instability it enables is conventional or sub-conventional conflict that stays below the nuclear threshold.
 
@@ -208,21 +208,27 @@ Benjamini, Y., & Hochberg, Y. (1995). Controlling the false discovery rate: A pr
 
 Dumitrescu, E.-I., & Hurlin, C. (2012). Testing for Granger non-causality in heterogeneous panels. *Economic Modelling*, 29(4), 1450–1460.
 
-Jervis, R. [ADD CITATION: full bibliographic reference for the Robert Jervis work referenced in the original project plan alongside Snyder (1965) — no title or year was given in that source material, and none is supplied here to avoid guessing]
+Jervis, R. (1984). *The Illogic of American Nuclear Strategy*. Cornell University Press.
 
-Kapur, S. P. (2008). [ADD CITATION: full bibliographic reference for Kapur (2008) — title, journal or publisher, and volume/page information not given in BDA_Project_Plan.docx]
+Kapur, S. P. (2008). Ten years of instability in a nuclear South Asia. *International Security*, 33(2), 71–94.
 
-Rauchhaus, R. (2009). [ADD CITATION: full bibliographic reference for Rauchhaus (2009) — title, journal or publisher, and volume/page information not given in BDA_Project_Plan.docx]
+Rauchhaus, R. (2009). Evaluating the nuclear peace hypothesis: A quantitative approach. *Journal of Conflict Resolution*, 53(2), 258–277.
 
-Snyder, G. H. (1965). [ADD CITATION: full bibliographic reference for Snyder (1965) — title and publication venue not given in BDA_Project_Plan.docx]
+Snyder, G. H. (1965). The balance of power and the balance of terror. In P. Seabury (Ed.), *The Balance of Power* (pp. 184–201). Chandler.
 
-Correlates of War Project. National Material Capabilities (v6.0) and Formal Alliances (v4.1). [ADD CITATION: exact Correlates of War citation format — data/README.md documents licensing terms but does not supply a formal citation string]
+Gibler, D. M. (2009). *International military alliances, 1648-2008*. CQ Press. (Correlates of War Formal Alliances dataset, v4.1.)
+
+Gleditsch, N. P., Wallensteen, P., Eriksson, M., Sollenberg, M., & Strand, H. (2002). Armed conflict 1946-2001: A new dataset. *Journal of Peace Research*, 39(5), 615–637. (Cited for both the UCDP Armed Conflict Dataset and the companion Battle-Related Deaths Dataset.)
+
+Harbom, L., Melander, E., & Wallensteen, P. (2008). Dyadic dimensions of armed conflict, 1946-2007. *Journal of Peace Research*, 45(5), 697–710. (UCDP Dyadic Dataset.)
+
+Singer, J. D., Bremer, S., & Stuckey, J. (1972). Capability distribution, uncertainty, and major power war, 1820-1965. In B. Russett (Ed.), *Peace, War, and Numbers* (pp. 19–48). Sage. (Correlates of War National Material Capabilities dataset, v6.0.)
 
 Stockholm International Peace Research Institute. *SIPRI Military Expenditure Database*. https://www.sipri.org/databases/milex
 
 Stockholm International Peace Research Institute. *SIPRI Arms Transfers Database*. https://www.sipri.org/databases/armstransfers
 
-Uppsala Conflict Data Program. [ADD CITATION: exact UCDP dataset + version citation (Armed Conflict Dataset, Georeferenced Event Dataset, Battle-Related Deaths, Dyadic Dataset) — data/README.md directs readers to cite the specific version used per https://ucdp.uu.se/downloads/ but does not supply the citation string itself]
+Sundberg, R., & Melander, E. (2013). Introducing the UCDP Georeferenced Event Dataset. *Journal of Peace Research*, 50(4), 523–532. (UCDP Georeferenced Event Dataset.)
 
 V-Dem (Varieties of Democracy). [ADD CITATION: exact V-Dem citation format — data/README.md directs readers to https://www.v-dem.net/about/citing-v-dem/ but does not supply the citation string itself]
 
