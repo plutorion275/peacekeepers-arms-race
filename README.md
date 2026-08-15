@@ -2,7 +2,7 @@
 
 **Testing the Stability–Instability Paradox with cross-national panel data, 1946–2024**
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21947819.svg)](https://doi.org/10.5281/zenodo.21947819)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21947818.svg)](https://doi.org/10.5281/zenodo.21947818)
 
 A quantitative panel-data study asking whether higher military capability shifts conflict composition toward low-intensity forms (the *substitution hypothesis*) or amplifies all conflict types (*amplification*). Originally a course project for PMDS507L (Big Data Analytics), now on a journal-submission track.
 

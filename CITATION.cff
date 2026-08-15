@@ -6,11 +6,11 @@ authors:
   - family-names: "Davis"
     given-names: "T Sam"
 repository-code: "https://github.com/plutorion275/peacekeepers-arms-race"
-doi: 10.5281/zenodo.21947819
+doi: 10.5281/zenodo.21947818
 identifiers:
   - type: doi
     value: 10.5281/zenodo.21947819
-    description: "Archived snapshot of version v1.0.0, the version this DOI covers."
+    description: "Archived snapshot of version v1.0.0, the version this identifier covers. The record's concept DOI (10.5281/zenodo.21947818) always resolves to the latest version."
 version: v1.0.0
 abstract: >-
   A quantitative panel-data study testing the Stability-Instability
