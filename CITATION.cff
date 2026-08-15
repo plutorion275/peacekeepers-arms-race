@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this code or findings, please cite this work."
+title: "The Peacekeepers' Arms Race: Testing the Stability-Instability Paradox in Cross-National Conflict Data, 1946-2024"
+type: software
+authors:
+  - family-names: "Davis"
+    given-names: "T Sam"
+repository-code: "https://github.com/plutorion275/peacekeepers-arms-race"
+abstract: >-
+  A quantitative panel-data study testing the Stability-Instability
+  Paradox across 192 countries (1946-2024): whether higher military
+  capability shifts conflict composition toward low-intensity forms
+  (substitution) or amplifies all conflict types (amplification).
+  Combines panel fixed-effects regression, Dumitrescu-Hurlin panel
+  Granger causality, and K-Means clustering on SIPRI, UCDP, World
+  Bank, V-Dem, and Correlates of War data.
+keywords:
+  - stability-instability paradox
+  - panel data
+  - Granger causality
+  - conflict studies
+  - military expenditure
+  - clustering
+license: MIT
+date-released: 2026-08-15
