@@ -104,6 +104,8 @@ source .venv/bin/activate   # macOS/Linux
 pip install -r requirements.txt
 ```
 
+Tested against Python 3.14 (see `.python-version`). Run `pytest tests/` to validate the shared ISO3-resolution logic independently of the notebooks.
+
 Then follow `data/README.md` to download raw source files (SIPRI, UCDP, World Bank, V-Dem, CoW) into `data/raw/`, and run notebooks 00→12 in order.
 
 ## Key methodological choices
