@@ -22,7 +22,7 @@ A quantitative panel-data study asking whether higher military capability shifts
 - **RQ2:** The standard Dumitrescu-Hurlin shuffle-null test is mis-specified for these panels (destroys negative serial structure in arms-transfer data → inflated type-I error, 0.32–0.48 against a 5% nominal rate). Under the correct circular-shift null, only 1 of 8 nominally significant cells survives per-cell permutation, and none survive BH correction.
 - **RQ3:** Four archetypes identified — Defensive Deterrent, Safe Hegemon, Inert Non-Combatant, Armed Instabilizer — with out-of-sample ANOVA validating predictive power (F=33.575, p<0.0001). Bootstrap Jaccard stability is below the conventional 0.75 threshold, but that threshold is miscalibrated for bootstrap-with-replacement at n=157 (theoretical ceiling ≈0.53 per Ben-Hur et al. 2002); against the correct 0.50 threshold, clusters are stable.
 
-Full detail and diagnostics are in `reports/` and the notebook HTML exports.
+Full detail and diagnostics live in `tables/` (per-notebook CSVs) and `figures/` (per-notebook plots); the paper writeup itself is being drafted in `reports/`.
 
 ## Data sources
 
@@ -41,12 +41,14 @@ Coverage: 192 countries, 1946–2024 (event-level conflict data from 1989 onward
 ## Repository structure
 
 ```
-peacekeepers_arms_race/
+peacekeepers-arms-race/
 ├── data/
-│   ├── raw/              # Original downloads (gitignored — see data/README.md)
-│   ├── checkpoints/      # Inter-notebook handoffs (parquet)
-│   └── clean/            # Analysis-ready panel datasets
+│   ├── README.md          # Source links, licenses, download instructions
+│   ├── raw/                # Original downloads — gitignored, not in repo
+│   ├── checkpoints/        # Inter-notebook handoffs (parquet) — gitignored
+│   └── clean/               # Analysis-ready panel datasets — gitignored
 ├── notebooks/
+│   ├── 00_eda_overview.ipynb
 │   ├── 01_data_acquisition.ipynb
 │   ├── 02_cleaning_iso3.ipynb
 │   ├── 03_panel_construction.ipynb
@@ -58,31 +60,43 @@ peacekeepers_arms_race/
 │   ├── 09_secondary_findings.ipynb
 │   ├── 10_alliance_grouped_analysis.ipynb
 │   ├── 11_mechanisms.ipynb
-│   ├── 12_rq2_power_analysis.ipynb
-│   ├── 13_forecasting_benchmark.ipynb
-│   └── 14_naive_vs_rigorous_comparison.ipynb
-├── src/                  # Shared modules imported by all notebooks
+│   └── 12_rq2_power_analysis.ipynb
+│       # 13 (forecasting benchmark) and 14 (naive vs. rigorous comparison) are planned, not yet built
+├── src/                     # Shared modules imported by all notebooks
 │   ├── config.py
 │   ├── iso3.py
 │   ├── io_utils.py
 │   ├── panels.py
 │   ├── mts.py
+│   ├── alliances.py
+│   ├── rq2_panel.py
 │   ├── stats_panel.py
 │   └── viz.py
-├── figures/               # Generated plots, by research question
-├── tables/                 # Regression/output tables (CSV + LaTeX)
-├── reports/                # Writeups and paper drafts
+├── scripts/                 # Standalone validation/utility scripts (see below)
+│   ├── check_notebooks.py
+│   ├── make_eda_notebook.py
+│   └── verify_nb06.py
+├── figures/                 # Generated plots, one subfolder per notebook (committed)
+├── tables/                  # Regression/output tables as CSV, one subfolder per notebook (committed)
+├── reports/                 # Paper drafts / writeups (in progress)
 ├── requirements.txt
 ├── LICENSE
+├── CITATION.cff
 └── README.md
 ```
 
-Notebooks are numbered for execution order; each consumes the previous notebook's parquet checkpoint from `data/checkpoints/` and is independently re-runnable via `jupyter nbconvert --execute`.
+Notebooks are numbered for execution order; each consumes the previous notebook's parquet checkpoint from `data/checkpoints/` and is independently re-runnable via `jupyter nbconvert --execute`. Unlike raw/intermediate data, **figures and tables are committed** so results are browsable without re-running the pipeline.
+
+## Scripts
+
+- `scripts/check_notebooks.py` — parses key notebooks with `nbformat` to confirm they're not corrupted before a commit.
+- `scripts/verify_nb06.py` — sanity-checks the Dumitrescu-Hurlin output in `tables/nb06/section3_dumitrescu_hurlin.csv` (catches exploding/non-finite Z-statistics).
+- `scripts/make_eda_notebook.py` — regenerates `notebooks/00_eda_overview.ipynb` programmatically.
 
 ## Setup
 
 ```bash
-git clone https://github.com/t-sam-davis/peacekeepers-arms-race.git
+git clone https://github.com/plutorion275/peacekeepers-arms-race.git
 cd peacekeepers-arms-race
 python -m venv .venv
 .venv\Scripts\activate      # Windows
@@ -90,7 +104,7 @@ source .venv/bin/activate   # macOS/Linux
 pip install -r requirements.txt
 ```
 
-Then follow `data/README.md` to download raw source files (SIPRI, UCDP, World Bank, V-Dem, CoW) into `data/raw/`, and run notebooks 01→14 in order.
+Then follow `data/README.md` to download raw source files (SIPRI, UCDP, World Bank, V-Dem, CoW) into `data/raw/`, and run notebooks 00→12 in order.
 
 ## Key methodological choices
 
@@ -111,7 +125,7 @@ Code in this repository is released under the [MIT License](LICENSE). Third-part
 
 ## Citation
 
-If you use this code or findings, please cite:
+If you use this code or findings, please cite (see also `CITATION.cff`):
 
 ```
 Davis, T. S. (2026). The Peacekeepers' Arms Race: Testing the Stability-Instability
