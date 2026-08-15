@@ -21,3 +21,6 @@ venv/
 figures/*.png
 figures/*.pdf
 !figures/.gitkeep
+
+# Project-specific: raw source data (not redistributed — see data/README.md)
+data/raw/
