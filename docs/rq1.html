@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RQ1 — Compositional Shift</title>
+<meta name="description" content="Does military capability shift conflict composition from war toward minor conflict? Two-way fixed-effects panel regression results.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22><rect width=%2224%22 height=%2224%22 rx=%225%22 fill=%22%2312140e%22/><circle cx=%2212%22 cy=%2212%22 r=%227%22 fill=%22none%22 stroke=%22%23e0502f%22 stroke-width=%222%22/><circle cx=%2212%22 cy=%2212%22 r=%222%22 fill=%22%23e0502f%22/></svg>">
+<link rel="stylesheet" href="assets/style.css">
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <svg class="mark" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.3" fill="currentColor" stroke="none"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+      <span>THE PEACEKEEPERS' ARMS RACE<small>Stability–Instability Paradox, 1989–2024</small></span>
+    </a>
+    <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="data-methods.html">Data &amp; Methods</a>
+      <a href="rq1.html" class="current">RQ1 · Composition</a>
+      <a href="rq2.html">RQ2 · Lead-Lag</a>
+      <a href="rq3.html">RQ3 · Archetypes</a>
+      <a href="gallery.html">Figures</a>
+      <a href="paper.html">Full Paper</a>
+      <a href="about.html">About</a>
+    </div>
+    <a class="nav-cta" href="https://github.com/plutorion275/peacekeepers-arms-race" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+</nav>
+
+<header class="hero" style="padding:90px 0 70px;background:radial-gradient(ellipse 900px 500px at 18% -10%, rgba(124,140,72,0.18), transparent 60%), radial-gradient(ellipse 700px 500px at 100% 10%, rgba(92,134,160,0.13), transparent 60%), var(--bg-void);">
+  <div class="hero-inner">
+    <div class="kicker olive">RQ1 &middot; Compositional Shift</div>
+    <h1 style="font-size:clamp(32px,4.4vw,54px);">The substitution hypothesis is <em>not</em> supported. It's amplification.</h1>
+    <p class="lede">If capability bought states a substitution from war toward minor conflict, the war-to-minor ratio should fall with capability, and extraterritorial engagement should rise. Two-way fixed-effects panel regression &mdash; country and year fixed effects, controls for GDP, population, and regime score, standard errors clustered by country &mdash; finds neither. It finds more of both, and above all, deadlier conflict once it occurs.</p>
+  </div>
+</header>
+
+<section class="section-dark">
+  <div class="container">
+    <div class="section-head">
+      <div class="kicker olive">H1a &ndash; H1e</div>
+      <h2>Five directional predictions, tested jointly</h2>
+      <p class="lede">A genuine substitution finding requires the pattern to hold across the set &mdash; not rescued by any single significant outcome considered alone. Estimated under the primary PCA-composite MTS specification.</p>
+    </div>
+    <div class="hyp-list">
+      <div class="hyp">
+        <div class="id">H1a</div>
+        <div class="txt"><b>War participation falls</b> with capability (&beta;&lt;0 predicted). Observed: &beta;=+0.30, p=.037 &mdash; significant, wrong sign.</div>
+        <div class="status rejected">Wrong Sign, Significant</div>
+      </div>
+      <div class="hyp">
+        <div class="id">H1b</div>
+        <div class="txt"><b>Minor-conflict participation rises</b> with capability (&beta;&gt;0 predicted). Observed: &beta;=+0.54, p=.002 &mdash; correct direction, but paired with H1a this is amplification, not substitution.</div>
+        <div class="status supported">Direction Confirmed</div>
+      </div>
+      <div class="hyp">
+        <div class="id">H1c</div>
+        <div class="txt"><b>War-to-minor ratio falls</b> with capability (&beta;&lt;0 predicted) &mdash; the direct substitution test. Observed: &beta;=+0.23, p=.294 &mdash; null, and positive.</div>
+        <div class="status null">Null (Direct Test Fails)</div>
+      </div>
+      <div class="hyp">
+        <div class="id">H1d</div>
+        <div class="txt"><b>Extraterritorial participation rises</b> with capability (&beta;&gt;0 predicted). Observed: &beta;=+0.16, p=.427 &mdash; null.</div>
+        <div class="status null">Null</div>
+      </div>
+      <div class="hyp">
+        <div class="id">H1e</div>
+        <div class="txt"><b>Extraterritorial share rises</b> with capability (&beta;&gt;0 predicted). Observed: &beta;=&minus;0.51, p=.124 &mdash; null, wrong sign.</div>
+        <div class="status null">Null</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-panel texture-grid">
+  <div class="container">
+    <div class="two-col">
+      <div>
+        <div class="kicker">The Headline Result</div>
+        <h2>Not composition. <span style="color:var(--red-bright);">Lethality.</span></h2>
+        <p class="lede" style="margin-top:16px;">The single strongest result in the entire project isn't one of the five compositional outcomes at all. Battle-death intensity (log-transformed battle-related deaths) rises sharply and significantly with capability &mdash; and a leave-one-out jackknife re-estimating the regression 193 times, once per country removed, keeps the coefficient positive and significant in <em>every single case</em>, ranging narrowly between 1.82 and 2.16.</p>
+      </div>
+      <div class="stat-strip" style="grid-template-columns:1fr 1fr;">
+        <div class="stat"><div class="num">&beta; 2.03</div><div class="label">log battle deaths ~ MTS</div></div>
+        <div class="stat"><div class="num">p &lt; .001</div><div class="label">N=4,896</div></div>
+        <div class="stat"><div class="num">.44</div><div class="label">R&sup2; within</div></div>
+        <div class="stat"><div class="num">1.82&ndash;2.16</div><div class="label">193/193 LOO drops hold</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-dark">
+  <div class="container">
+    <div class="section-head">
+      <div class="kicker">Primary Regression</div>
+      <h2>All six outcomes, PCA-composite specification</h2>
+    </div>
+    <div class="tbl-wrap">
+      <table class="data">
+        <thead><tr><th>Outcome</th><th class="mono">&beta; (MTS)</th><th class="mono">SE</th><th class="mono">p</th><th class="mono">N</th><th class="mono">R&sup2; within</th></tr></thead>
+        <tbody>
+          <tr><td>War participation (H1a)</td><td class="mono hi">+0.303</td><td class="mono">0.145</td><td class="mono">.037</td><td class="mono">4,896</td><td class="mono">.341</td></tr>
+          <tr><td>Minor-conflict participation (H1b)</td><td class="mono hi">+0.539</td><td class="mono">0.173</td><td class="mono">.002</td><td class="mono">4,896</td><td class="mono">.478</td></tr>
+          <tr><td>War-to-minor ratio (H1c)</td><td class="mono">+0.234</td><td class="mono">0.223</td><td class="mono">.294</td><td class="mono">1,846</td><td class="mono">.102</td></tr>
+          <tr><td>Extraterritorial participation (H1d)</td><td class="mono">+0.160</td><td class="mono">0.202</td><td class="mono">.427</td><td class="mono">4,896</td><td class="mono">.575</td></tr>
+          <tr><td>Extraterritorial share (H1e)</td><td class="mono">&minus;0.509</td><td class="mono">0.331</td><td class="mono">.124</td><td class="mono">1,846</td><td class="mono">.249</td></tr>
+          <tr><td><b>Battle-death intensity</b> (headline)</td><td class="mono hi">+2.030</td><td class="mono">0.592</td><td class="mono">.001</td><td class="mono">4,896</td><td class="mono">.438</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="figure-row" style="margin-top:44px;">
+      <figure class="plate">
+        <img src="assets/figures/nb05/fig1_forest_robustness.png" alt="Forest plot showing coefficient robustness across the three MTS specifications">
+        <figcaption><div class="fig-id">Fig. 05.1</div><div class="fig-cap">Coefficient robustness across all three MTS specifications and a Poisson FE check.</div></figcaption>
+      </figure>
+      <figure class="plate">
+        <img src="assets/figures/nb05/fig2_war_minor_ratio_trajectories.png" alt="War-to-minor conflict ratio trajectories over time">
+        <figcaption><div class="fig-id">Fig. 05.2</div><div class="fig-cap">War-to-minor participation ratio trajectories, selected high- and low-capability states.</div></figcaption>
+      </figure>
+      <figure class="plate">
+        <img src="assets/figures/nb05/fig3_subperiod_coefficients.png" alt="Subperiod coefficient split across Cold War, post-Cold War, and post-9/11 eras">
+        <figcaption><div class="fig-id">Fig. 05.3</div><div class="fig-cap">Subperiod split &mdash; extraterritorial coefficient flips sign around 9/11, though neither era clears significance alone.</div></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="section-paper texture-grid on-paper">
+  <div class="container">
+    <div class="section-head">
+      <div class="kicker">Mechanism Checks</div>
+      <h2>Is the lethality effect broad, or an artefact of one region or regime type?</h2>
+      <p class="lede">Two independent probes ask whether the battle-death finding is diffuse or driven by a subgroup &mdash; both point toward a broad-based effect that is regionally concentrated but not regime-contingent.</p>
+    </div>
+    <div class="figure-row">
+      <figure class="plate">
+        <img src="assets/figures/nb10/fig1_region_marginal_effects.png" alt="Regional marginal effects showing Africa concentration of the battle death effect">
+        <figcaption><div class="fig-id">Fig. 10.1</div><div class="fig-cap">Marginal effect by region &mdash; significantly concentrated in Africa (marginal &beta;=4.95, p&lt;.001) relative to every other region.</div></figcaption>
+      </figure>
+      <figure class="plate">
+        <img src="assets/figures/nb11/fig1_loo_distribution.png" alt="Leave-one-out jackknife distribution for the Africa subsample">
+        <figcaption><div class="fig-id">Fig. 11.1</div><div class="fig-cap">Africa-subsample leave-one-out jackknife &mdash; 34 single-country drops plus a joint 3-country drop, &beta; stays 4.49&ndash;5.41 throughout.</div></figcaption>
+      </figure>
+      <figure class="plate">
+        <img src="assets/figures/nb11/fig2_marginal_by_polyarchy.png" alt="Marginal effect of capability on battle-death intensity by regime score">
+        <figcaption><div class="fig-id">Fig. 11.2</div><div class="fig-cap">No regime-type moderation: marginal effect holds across low, medium, and high V-Dem polyarchy scores (interaction p=.497).</div></figcaption>
+      </figure>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="two-col">
+      <div>
+        <div class="kicker">Reading Caution</div>
+        <h3 style="font-size:22px;">Intensity co-moves with conflict &mdash; treat it as associational</h3>
+        <p style="color:var(--ink-dark-dim);font-size:15px;margin-top:12px;">A lagged-MTS check finds the battle-death association attenuates sharply once capability is measured before rather than during a conflict-year: contemporaneous &beta;=2.03*** falls to &beta;=0.97** at t&minus;1 and to a null &beta;=&minus;0.01 by t&minus;3, a 100% drop. Capability co-moves with, and may partly respond to, ongoing conflict &mdash; which is why every claim on this page is reported as associational, not causal.</p>
+      </div>
+      <figure class="plate">
+        <img src="assets/figures/nb11/fig3_lagged_mts.png" alt="Lagged MTS regression showing attenuation of the battle-death effect at t-1 and t-3">
+        <figcaption><div class="fig-id">Fig. 11.3</div><div class="fig-cap">Battle-death coefficient attenuates from t=0 to t&minus;3, informing the associational (not causal) framing.</div></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="section-dark">
+  <div class="container">
+    <div class="two-col">
+      <div>
+        <div class="kicker olive">Verdict</div>
+        <h2>Amplification, not substitution</h2>
+        <p class="lede" style="margin-top:16px;">Higher-capability states are not trading war for minor conflict &mdash; they participate in more of both, and above all, their conflicts are measurably deadlier once they occur. That's a different theoretical claim than Snyder's original compositional formulation: closer to capability lowering the threshold for entering <em>any</em> conflict than to capability specifically redirecting states toward the cheapest kind.</p>
+      </div>
+      <figure class="plate">
+        <img src="assets/figures/nb09/fig2_battle_death_intensity.png" alt="Battle death intensity secondary finding visualization">
+        <figcaption><div class="fig-id">Fig. 09.2</div><div class="fig-cap">Battle-death intensity by capability tercile &mdash; the cleanest, most consistently significant result in the analysis.</div></figcaption>
+      </figure>
+    </div>
+    <div class="hero-actions" style="margin-top:48px;">
+      <a class="btn btn-primary" href="rq2.html">Next: RQ2 &mdash; The Lead-Lag Case File
+        <svg class="icon" style="width:15px;height:15px" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a class="btn btn-outline" href="data-methods.html">Back to Data &amp; Methods</a>
+    </div>
+  </div>
+</section>
+
+<footer id="footer-placeholder"></footer>
+<div class="lightbox" id="lightbox"><span class="lb-close">CLOSE ✕</span><img src="" alt=""><div class="lb-cap"></div></div>
+<script src="assets/script.js"></script>
+<script src="assets/footer.js"></script>

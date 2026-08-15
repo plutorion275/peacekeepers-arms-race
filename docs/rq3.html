@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RQ3 — Country Archetypes</title>
+<meta name="description" content="Do countries cluster into distinct conflict-capability archetypes? Four emerge; two clear a correctly calibrated stability bar.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22><rect width=%2224%22 height=%2224%22 rx=%225%22 fill=%22%2312140e%22/><circle cx=%2212%22 cy=%2212%22 r=%227%22 fill=%22none%22 stroke=%22%23e0502f%22 stroke-width=%222%22/><circle cx=%2212%22 cy=%2212%22 r=%222%22 fill=%22%23e0502f%22/></svg>">
+<link rel="stylesheet" href="assets/style.css">
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <svg class="mark" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.3" fill="currentColor" stroke="none"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+      <span>THE PEACEKEEPERS' ARMS RACE<small>Stability–Instability Paradox, 1989–2024</small></span>
+    </a>
+    <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="data-methods.html">Data &amp; Methods</a>
+      <a href="rq1.html">RQ1 · Composition</a>
+      <a href="rq2.html">RQ2 · Lead-Lag</a>
+      <a href="rq3.html" class="current">RQ3 · Archetypes</a>
+      <a href="gallery.html">Figures</a>
+      <a href="paper.html">Full Paper</a>
+      <a href="about.html">About</a>
+    </div>
+    <a class="nav-cta" href="https://github.com/plutorion275/peacekeepers-arms-race" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+</nav>
+
+<header class="hero" style="padding:90px 0 70px;background:radial-gradient(ellipse 900px 500px at 18% -10%, rgba(193,148,63,0.20), transparent 60%), radial-gradient(ellipse 700px 500px at 100% 10%, rgba(189,58,38,0.12), transparent 60%), var(--bg-void);">
+  <div class="hero-inner">
+    <div class="kicker amber">RQ3 &middot; Country Archetypes</div>
+    <h1 style="font-size:clamp(32px,4.4vw,54px);">Four archetypes. Predictive across all four. Stable in only two.</h1>
+    <p class="lede">K-Means clustering on 610 country-epoch observations (157 countries &times; four decade-epochs) recovers four data-driven conflict-capability archetypes &mdash; matching the number the project's theoretical framing anticipated. Most countries aren't fixed to one archetype: 100 of 157 (64%) appear in more than one across the four epochs studied.</p>
+  </div>
+</header>
+
+<section class="section-dark texture-grid">
+  <div class="container">
+    <div class="section-head">
+      <div class="kicker amber">Archetypes</div>
+      <h2>Centroid profiles, k=4, silhouette-selected</h2>
+    </div>
+    <div class="arche-grid">
+      <div class="arche">
+        <div class="head">
+          <div><h3>Safe Hegemon</h3><div class="n">n = 118 country-epochs</div></div>
+          <div class="stable-badge yes">Stable · J=0.58</div>
+        </div>
+        <p>Lowest war-to-minor ratio of any archetype &mdash; consistent with "safe" &mdash; but simultaneously the <b>highest mean battle-death intensity</b> by a wide margin. Rarely enters war-level conflict, but when it does, the conflicts are historically among the costliest in the panel.</p>
+        <div class="metrics">
+          <div><span class="v">0.277</span><span class="k">MTS composite</span></div>
+          <div><span class="v">5.90</span><span class="k">Battle-death intensity (log)</span></div>
+          <div><span class="v">0.198</span><span class="k">War-to-minor ratio</span></div>
+          <div><span class="v">87.8%</span><span class="k">Country-years active</span></div>
+        </div>
+      </div>
+      <div class="arche">
+        <div class="head">
+          <div><h3>Armed Instabilizer</h3><div class="n">n = 125 country-epochs</div></div>
+          <div class="stable-badge no">Not Stable · J=0.42</div>
+        </div>
+        <p>Highest capability of any archetype, paired with elevated minor-conflict participation and by far the highest extraterritorial-share mean &mdash; the profile closest to the paradox's classic "instability" prediction.</p>
+        <div class="metrics">
+          <div><span class="v">0.301</span><span class="k">MTS composite</span></div>
+          <div><span class="v">1.97</span><span class="k">Minor-conflict participation</span></div>
+          <div><span class="v">1.29</span><span class="k">Extraterritorial share</span></div>
+          <div><span class="v">82.4%</span><span class="k">Country-years active</span></div>
+        </div>
+      </div>
+      <div class="arche">
+        <div class="head">
+          <div><h3>Defensive Deterrent</h3><div class="n">n = 85 country-epochs</div></div>
+          <div class="stable-badge no">Not Stable · J=0.46</div>
+        </div>
+        <p>Moderate capability, comparatively low overall conflict activity &mdash; the profile closest to a "successful deterrence" reading, though it is the smallest and least stable of the four archetypes.</p>
+        <div class="metrics">
+          <div><span class="v">0.263</span><span class="k">MTS composite</span></div>
+          <div><span class="v">0.756</span><span class="k">War-to-minor ratio</span></div>
+          <div><span class="v">0.140</span><span class="k">Battle-death intensity (log)</span></div>
+          <div><span class="v">36.8%</span><span class="k">Country-years active</span></div>
+        </div>
+      </div>
+      <div class="arche">
+        <div class="head">
+          <div><h3>Inert Non-Combatant</h3><div class="n">n = 282 country-epochs</div></div>
+          <div class="stable-badge yes">Stable · J=0.54</div>
+        </div>
+        <p>The largest group by far. Lowest capability of any archetype and minimal conflict engagement of any kind &mdash; active in only 10% of country-years.</p>
+        <div class="metrics">
+          <div><span class="v">0.180</span><span class="k">MTS composite</span></div>
+          <div><span class="v">10.0%</span><span class="k">Country-years active</span></div>
+          <div><span class="v">0.098</span><span class="k">War-to-minor ratio</span></div>
+          <div><span class="v">0.517</span><span class="k">Battle-death intensity (log)</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-panel texture-grid">
+  <div class="container">
+    <div class="section-head">
+      <div class="kicker">How Four Was Chosen</div>
+      <h2>One criterion says 4. Another says 8. Both are reported.</h2>
+      <p class="lede">Silhouette score peaks at k=4 (0.293) across the tested range k=2&ndash;8. The gap statistic instead favors k=8, still rising at the boundary of what was tested &mdash; and Ward hierarchical clustering, run independently on the identical feature set, shows the same disagreement in its own right (Ward's own silhouette also maximizes at k=8). k=4 is used as the primary specification because silhouette is the more robust criterion for the non-uniform, regionally clustered distribution typical of country panels &mdash; a documented disagreement, not an unambiguous answer.</p>
+    </div>
+    <div class="figure-row">
+      <figure class="plate">
+        <img src="assets/figures/nb07/fig1_k_selection.png" alt="Silhouette score and gap statistic for k selection">
+        <figcaption><div class="fig-id">Fig. 07.1</div><div class="fig-cap">K-Means: silhouette score (peaks k=4) vs. gap statistic (favors k=8).</div></figcaption>
+      </figure>
+      <figure class="plate">
+        <img src="assets/figures/nb07/fig1b_ward_dendrogram.png" alt="Ward hierarchical clustering dendrogram">
+        <figcaption><div class="fig-id">Fig. 07.1b</div><div class="fig-cap">Ward hierarchical dendrogram &mdash; independent algorithm, same feature set.</div></figcaption>
+      </figure>
+      <figure class="plate">
+        <img src="assets/figures/nb07/fig2_cluster_scatter.png" alt="Cluster scatter plot of the four archetypes">
+        <figcaption><div class="fig-id">Fig. 07.2</div><div class="fig-cap">The four archetypes in capability&ndash;conflict feature space.</div></figcaption>
+      </figure>
+      <figure class="plate">
+        <img src="assets/figures/nb07/fig3_centroid_heatmap.png" alt="Archetype centroid heatmap across all features">
+        <figcaption><div class="fig-id">Fig. 07.3</div><div class="fig-cap">Full centroid heatmap &mdash; all clustering features, all four archetypes.</div></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="section-dark">
+  <div class="container">
+    <div class="two-col">
+      <div>
+        <div class="kicker amber">Stability vs. Predictive Validity</div>
+        <h2>Two different questions &mdash; and they don't have to agree</h2>
+        <p class="lede" style="margin-top:16px;">Bootstrap stability asks whether the same partition reappears on a different sample. Out-of-sample validation asks whether membership carries real forward-looking information regardless of reproducibility. Held out against 2019&ndash;2024 conflict data with clusters trained on pre-2019 features only, cluster membership <b>strongly predicts</b> future conflict &mdash; including for the two archetypes whose bootstrap stability falls short.</p>
+        <div class="stat-strip" style="grid-template-columns:1fr 1fr;margin-top:24px;">
+          <div class="stat"><div class="num">F=33.6</div><div class="label">One-way ANOVA, OOS conflict</div></div>
+          <div class="stat"><div class="num">p&lt;.001</div><div class="label">All 4 archetypes carry signal</div></div>
+        </div>
+      </div>
+      <figure class="plate">
+        <img src="assets/figures/nb08/fig6_rq3_oos_bar.png" alt="Out-of-sample validation bar chart for RQ3 archetypes">
+        <figcaption><div class="fig-id">Fig. 08.6</div><div class="fig-cap">Out-of-sample conflict activity by archetype, 2019&ndash;2024 held-out window.</div></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="section-paper texture-grid on-paper">
+  <div class="container">
+    <div class="section-head">
+      <div class="kicker">Countries Don't Stay Put</div>
+      <h2>64% of countries appear in more than one archetype across the four epochs</h2>
+      <p class="lede">Direct, epoch-level evidence for a "soft regions on a continuum" reading, rather than fixed types assumed without support.</p>
+    </div>
+    <figure class="plate" style="max-width:900px;">
+      <img src="assets/figures/nb07/fig4_archetype_sankey.png" alt="Sankey diagram of archetype transitions across decade epochs">
+      <figcaption><div class="fig-id">Fig. 07.4</div><div class="fig-cap">Archetype transitions across four decade-epochs (1990s&ndash;2020s) &mdash; most countries move.</div></figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="section-dark">
+  <div class="container">
+    <div class="two-col">
+      <div>
+        <div class="kicker amber">Verdict</div>
+        <h2>Predictive, partially stable &mdash; reported as a genuine split</h2>
+        <p class="lede" style="margin-top:16px;">Safe Hegemon and Inert Non-Combatant are the more durable categories; Defensive Deterrent and Armed Instabilizer are better read as real, predictively useful, but softer regions on a continuum than sharply bounded types. A paper reporting four uniformly "stable" clusters under the conventional 0.75 threshold would have been reporting an artefact of the threshold, not a finding about the world.</p>
+      </div>
+      <figure class="plate">
+        <img src="assets/figures/nb09/fig1_stability_vs_validity.png" alt="Stability versus validity scatter for the four archetypes">
+        <figcaption><div class="fig-id">Fig. 09.1</div><div class="fig-cap">Bootstrap stability (0.50 threshold) vs. out-of-sample predictive validity, all four archetypes.</div></figcaption>
+      </figure>
+    </div>
+    <div class="hero-actions" style="margin-top:48px;">
+      <a class="btn btn-primary" href="paper.html">Read the Full Paper
+        <svg class="icon" style="width:15px;height:15px" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a class="btn btn-outline" href="gallery.html">Browse All Figures</a>
+    </div>
+  </div>
+</section>
+
+<footer id="footer-placeholder"></footer>
+<div class="lightbox" id="lightbox"><span class="lb-close">CLOSE ✕</span><img src="" alt=""><div class="lb-cap"></div></div>
+<script src="assets/script.js"></script>
+<script src="assets/footer.js"></script>

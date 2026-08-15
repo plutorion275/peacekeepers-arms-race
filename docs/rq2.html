@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RQ2 — The Lead-Lag Case File</title>
+<meta name="description" content="A textbook panel Granger-causality test flagged 8 of 12 cells significant. Under a corrected null, zero survive. The full audit trail.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22><rect width=%2224%22 height=%2224%22 rx=%225%22 fill=%22%2312140e%22/><circle cx=%2212%22 cy=%2212%22 r=%227%22 fill=%22none%22 stroke=%22%23e0502f%22 stroke-width=%222%22/><circle cx=%2212%22 cy=%2212%22 r=%222%22 fill=%22%23e0502f%22/></svg>">
+<link rel="stylesheet" href="assets/style.css">
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <svg class="mark" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.3" fill="currentColor" stroke="none"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+      <span>THE PEACEKEEPERS' ARMS RACE<small>Stability–Instability Paradox, 1989–2024</small></span>
+    </a>
+    <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="data-methods.html">Data &amp; Methods</a>
+      <a href="rq1.html">RQ1 · Composition</a>
+      <a href="rq2.html" class="current">RQ2 · Lead-Lag</a>
+      <a href="rq3.html">RQ3 · Archetypes</a>
+      <a href="gallery.html">Figures</a>
+      <a href="paper.html">Full Paper</a>
+      <a href="about.html">About</a>
+    </div>
+    <a class="nav-cta" href="https://github.com/plutorion275/peacekeepers-arms-race" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+</nav>
+
+<header class="hero" style="padding:90px 0 70px;background:radial-gradient(ellipse 900px 500px at 18% -10%, rgba(92,134,160,0.20), transparent 60%), radial-gradient(ellipse 700px 500px at 100% 10%, rgba(189,58,38,0.13), transparent 60%), var(--bg-void);">
+  <div class="hero-inner">
+    <div class="kicker steel">RQ2 &middot; Weapon-Class Lead-Lag &mdash; Case File</div>
+    <h1 style="font-size:clamp(32px,4.4vw,54px);">A textbook test said 8 of 12. The correct null says zero.</h1>
+    <p class="lede">Do specific weapon-class acquisitions &mdash; aircraft &amp; drones, missiles, naval, ground systems &mdash; precede low-intensity conflict within a short window? This section is the project's central methodological contribution: not a single statistic, but a five-stage audit trail where each stage revises the one before it.</p>
+  </div>
+</header>
+
+<section class="section-dark texture-grid">
+  <div class="container">
+    <div class="case-log">
+
+      <div class="case-step" data-step="A">
+        <h4>Stage A &middot; The Original Test</h4>
+        <h3>Dumitrescu&ndash;Hurlin panel Granger causality, run textbook-standard</h3>
+        <p>Twelve pre-specified cells &mdash; four weapon classes &times; three conflict outcomes &mdash; tested at a one-year lag, significance assessed against the conventional within-country shuffle null. The result looks striking: <b>8 of 12 cells</b> flagged significant. The strongest signal is ground-systems deliveries preceding war-level participation.</p>
+        <div class="readout">
+          <div><span class="v">8 / 12</span><span class="k">Cells flagged (naive)</span></div>
+          <div><span class="v">Z=6.42</span><span class="k">Ground &rarr; War, p&lt;.001</span></div>
+          <div><span class="v">Z=4.93</span><span class="k">Ground &rarr; Extraterritorial</span></div>
+          <div><span class="v">Z=3.64</span><span class="k">Missiles &rarr; Minor</span></div>
+        </div>
+      </div>
+
+      <div class="case-step" data-step="B">
+        <h4>Stage B &middot; The Discovery</h4>
+        <h3>The shuffle null erases a real feature of the data</h3>
+        <p>The treatment series &mdash; a country's year-to-year weapon deliveries &mdash; has genuine negative lag-1 autocorrelation in the observed data (&minus;0.33): a big delivery year tends to be followed by a leaner one, consistent with how procurement tranches actually arrive. A random within-country shuffle destroys almost all of that structure, dropping the shuffled series' autocorrelation to &minus;0.02 &mdash; indistinguishable from a random walk. The null the test is calibrated against no longer resembles the real data it's supposed to stand in for.</p>
+        <div class="readout">
+          <div><span class="v">&minus;0.33</span><span class="k">Real series autocorrelation</span></div>
+          <div><span class="v">&minus;0.02</span><span class="k">Shuffled series autocorrelation</span></div>
+        </div>
+      </div>
+
+      <div class="case-step" data-step="C">
+        <h4>Stage C &middot; The Correction</h4>
+        <h3>Circular-shift null: same rotation, real structure intact</h3>
+        <p>Instead of randomly reordering each country's treatment values, each series is rotated by a random offset &mdash; preserving its own autocorrelation almost exactly (&minus;0.31 vs. &minus;0.33 observed) while still fully destroying temporal alignment with the outcome. Rerunning the identical test 2,000 times against this correctly-specified null &mdash; where by construction no relationship exists &mdash; it still rejects at conventional significance <b>32&ndash;48% of the time</b> across the twelve cells: six to ten times its own nominal 5% rate. That is the calibrated size of the naive test on this exact data.</p>
+        <div class="readout">
+          <div><span class="v">&minus;0.31</span><span class="k">Circular-shift autocorrelation</span></div>
+          <div><span class="v">32&ndash;48%</span><span class="k">False-positive rate (nominal: 5%)</span></div>
+        </div>
+      </div>
+
+      <div class="case-step" data-step="D">
+        <h4>Stage D &middot; Multiple-Testing Correction</h4>
+        <h3>Benjamini&ndash;Hochberg across the 12-cell family: zero survive</h3>
+        <p>Applying FDR correction across all twelve pre-specified cells against the corrected null produces a starkly different picture. The strongest raw signal &mdash; ground systems preceding war participation &mdash; has a per-cell permutation p of .032 in isolation, nominally still under .05, but a BH-adjusted q-value of <b>.390</b> once the full family is accounted for. No other cell comes closer.</p>
+        <div class="readout">
+          <div><span class="v">0 / 12</span><span class="k">Cells survive BH correction</span></div>
+          <div><span class="v">q=.390</span><span class="k">Best surviving cell (Ground&rarr;War)</span></div>
+        </div>
+      </div>
+
+      <div class="case-step" data-step="E">
+        <h4>Stage E &middot; Independent Corroboration</h4>
+        <h3>An out-of-sample forecasting benchmark reaches the same answer, by a different route</h3>
+        <p>A rolling-origin design asks a decision question directly: does knowing a country's weapon-class deliveries actually improve real forecasts of next-year conflict-participation change, beyond an AR(1)-only baseline using the country's own recent history? Forecast-skill differential is close to zero and inconsistently signed across all twelve cells &mdash; from a 0.02% improvement to a 0.06% <em>degradation</em>. Tested against the same circular-shift null with the same BH correction: zero survivors, independently.</p>
+        <div class="readout">
+          <div><span class="v">0 / 12</span><span class="k">Cells show forecast skill</span></div>
+          <div><span class="v">2005&ndash;23</span><span class="k">Rolling-origin evaluation window</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="section-paper texture-grid on-paper">
+  <div class="container">
+    <div class="section-head">
+      <div class="kicker">Naive vs. Rigorous, Side by Side</div>
+      <h2>The gap between the two is the headline, not a caveat on a null result</h2>
+    </div>
+    <figure class="plate" style="max-width:900px;">
+      <img src="assets/figures/nb14/fig1_naive_vs_rigorous.png" alt="Naive versus rigorous test comparison for RQ2, showing 8 of 12 cells flagged naively versus 0 of 12 surviving the corrected test">
+      <figcaption><div class="fig-id">Fig. 14.1</div><div class="fig-cap">The naive Dumitrescu&ndash;Hurlin test flags 8/12 cells. The same test, against a properly calibrated null with multiplicity correction, finds 0/12 &mdash; a conclusion an entirely independent forecasting exercise reaches by an unrelated route.</div></figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="section-dark">
+  <div class="container">
+    <div class="section-head">
+      <div class="kicker steel">The Naive Result</div>
+      <h2>All twelve lag-1 cells, as the textbook test reported them</h2>
+    </div>
+    <div class="tbl-wrap">
+      <table class="data">
+        <thead><tr><th>Weapon Class</th><th>Outcome</th><th class="mono">Z</th><th class="mono">p (naive)</th><th class="mono">Sig.</th></tr></thead>
+        <tbody>
+          <tr><td>Ground systems</td><td>War participation</td><td class="mono hi">6.42</td><td class="mono">&lt;.001</td><td class="mono">***</td></tr>
+          <tr><td>Ground systems</td><td>Extraterritorial</td><td class="mono hi">4.93</td><td class="mono">&lt;.001</td><td class="mono">***</td></tr>
+          <tr><td>Missiles</td><td>Minor conflict</td><td class="mono hi">3.64</td><td class="mono">&lt;.001</td><td class="mono">***</td></tr>
+          <tr><td>Naval</td><td>Minor conflict</td><td class="mono hi">3.29</td><td class="mono">.001</td><td class="mono">***</td></tr>
+          <tr><td>Ground systems</td><td>Minor conflict</td><td class="mono">1.87</td><td class="mono">.031</td><td class="mono">**</td></tr>
+          <tr><td>Missiles</td><td>War participation</td><td class="mono">2.26</td><td class="mono">.012</td><td class="mono">**</td></tr>
+          <tr><td>Missiles</td><td>Extraterritorial</td><td class="mono">2.02</td><td class="mono">.022</td><td class="mono">**</td></tr>
+          <tr><td>Naval</td><td>Extraterritorial</td><td class="mono">2.04</td><td class="mono">.021</td><td class="mono">**</td></tr>
+          <tr><td>Aircraft / drones</td><td>Minor conflict</td><td class="mono">0.23</td><td class="mono">.408</td><td class="mono">&mdash;</td></tr>
+          <tr><td>Aircraft / drones</td><td>War participation</td><td class="mono">&minus;0.05</td><td class="mono">.520</td><td class="mono">&mdash;</td></tr>
+          <tr><td>Aircraft / drones</td><td>Extraterritorial</td><td class="mono">0.54</td><td class="mono">.294</td><td class="mono">&mdash;</td></tr>
+          <tr><td>Naval</td><td>War participation</td><td class="mono">1.00</td><td class="mono">.158</td><td class="mono">&mdash;</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:16px;color:var(--ink-faint);font-size:13px;">8 of these 12 clear conventional significance under the naive shuffle-null. Under the corrected circular-shift null with Benjamini&ndash;Hochberg correction: all twelve fail.</p>
+
+    <div class="figure-row" style="margin-top:44px;">
+      <figure class="plate">
+        <img src="assets/figures/nb06/fig1_ccf_heatmaps.png" alt="Cross-correlation function heatmaps by weapon class and outcome">
+        <figcaption><div class="fig-id">Fig. 06.1</div><div class="fig-cap">Descriptive cross-correlation function, 0&ndash;36 month lags, by weapon class and outcome.</div></figcaption>
+      </figure>
+      <figure class="plate">
+        <img src="assets/figures/nb06/fig2_dh_forest.png" alt="Dumitrescu-Hurlin forest plot of naive results">
+        <figcaption><div class="fig-id">Fig. 06.2</div><div class="fig-cap">Naive Dumitrescu&ndash;Hurlin forest plot &mdash; the result before the null-model correction.</div></figcaption>
+      </figure>
+      <figure class="plate">
+        <img src="assets/figures/nb06/fig3_turkey_trajectory.png" alt="Turkey case study trajectory of weapon deliveries and conflict participation">
+        <figcaption><div class="fig-id">Fig. 06.3</div><div class="fig-cap">Turkey case trajectory &mdash; a single country's weapon-delivery and conflict-participation series side by side.</div></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="section-panel texture-grid">
+  <div class="container">
+    <div class="section-head">
+      <div class="kicker">Null Calibration, in Detail</div>
+      <h2>Five diagnostics behind the circular-shift correction</h2>
+    </div>
+    <div class="figure-row">
+      <figure class="plate">
+        <img src="assets/figures/nb12/fig1_power_curve.png" alt="Power curve for the delta=0 injection diagnostic">
+        <figcaption><div class="fig-id">Fig. 12.1</div><div class="fig-cap">Power curve &mdash; the &delta;=0 injection diagnostic that first flagged the naive test as anti-conservative.</div></figcaption>
+      </figure>
+      <figure class="plate">
+        <img src="assets/figures/nb12/fig2_permutation_null.png" alt="Permutation null distribution of the significant-cell count">
+        <figcaption><div class="fig-id">Fig. 12.2</div><div class="fig-cap">Permutation null of the significant-cell count &mdash; observed count vs. shuffle-null distribution.</div></figcaption>
+      </figure>
+      <figure class="plate">
+        <img src="assets/figures/nb12/fig3_negz_null_vs_observed.png" alt="Negative Z-statistic null artifact comparison">
+        <figcaption><div class="fig-id">Fig. 12.3</div><div class="fig-cap">The negative-Z artefact at lags 2&ndash;3 &mdash; finite-sample DH bias, present even on pure white noise.</div></figcaption>
+      </figure>
+      <figure class="plate">
+        <img src="assets/figures/nb12/fig4_percell_permutation.png" alt="Per-cell permutation test results">
+        <figcaption><div class="fig-id">Fig. 12.4</div><div class="fig-cap">Per-cell permutation test &mdash; each of the 8 nominally-significant cells checked against its own null.</div></figcaption>
+      </figure>
+      <figure class="plate">
+        <img src="assets/figures/nb12/fig5_null_scheme_comparison.png" alt="Comparison of shuffle null versus circular-shift null schemes">
+        <figcaption><div class="fig-id">Fig. 12.5</div><div class="fig-cap">Shuffle-null vs. circular-shift-null side by side &mdash; the diagnostic that motivates the correction.</div></figcaption>
+      </figure>
+      <figure class="plate">
+        <img src="assets/figures/nb13/fig1_skill_by_cell.png" alt="Forecast skill differential by cell">
+        <figcaption><div class="fig-id">Fig. 13.1</div><div class="fig-cap">Out-of-sample forecast-skill differential, treatment-augmented vs. AR(1)-only, by cell.</div></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="section-dark">
+  <div class="container">
+    <div class="two-col">
+      <div>
+        <div class="kicker steel">Verdict</div>
+        <h2>Not "the drone effect is false" &mdash; a narrower, more honest claim</h2>
+        <p class="lede" style="margin-top:16px;">Within a one-to-three-year window, at four broad weapon-category aggregates, there is no detectable lead-lag signal under any of three independent tests. That doesn't rule out the underlying mechanism operating on a longer horizon, at a finer weapon taxonomy, or through conflict types &mdash; cyber operations, sub-threshold strikes &mdash; that UCDP's battle-death floor doesn't capture at all.</p>
+        <p style="color:var(--ink-dim);font-size:14.5px;">The methodological lesson generalises well beyond this dataset: any panel series with genuine negative serial correlation &mdash; procurement cycles, discrete-tranche deliveries &mdash; is a candidate for the same shuffle-null miscalibration, silently, unless checked directly.</p>
+      </div>
+      <figure class="plate">
+        <img src="assets/figures/nb13/fig2_forecast_vs_actual_example.png" alt="Forecast versus actual example for out-of-sample benchmark">
+        <figcaption><div class="fig-id">Fig. 13.2</div><div class="fig-cap">Rolling-origin forecast vs. actual, example country &mdash; treatment-augmented and AR(1)-only overlaid.</div></figcaption>
+      </figure>
+    </div>
+    <div class="hero-actions" style="margin-top:48px;">
+      <a class="btn btn-primary" href="rq3.html">Next: RQ3 &mdash; Country Archetypes
+        <svg class="icon" style="width:15px;height:15px" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a class="btn btn-outline" href="rq1.html">Back to RQ1</a>
+    </div>
+  </div>
+</section>
+
+<footer id="footer-placeholder"></footer>
+<div class="lightbox" id="lightbox"><span class="lb-close">CLOSE ✕</span><img src="" alt=""><div class="lb-cap"></div></div>
+<script src="assets/script.js"></script>
+<script src="assets/footer.js"></script>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data &amp; Methods</title>
+<meta name="description" content="Nine datasets, five providers, and the pipeline corrections that make the panel trustworthy.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22><rect width=%2224%22 height=%2224%22 rx=%225%22 fill=%22%2312140e%22/><circle cx=%2212%22 cy=%2212%22 r=%227%22 fill=%22none%22 stroke=%22%23e0502f%22 stroke-width=%222%22/><circle cx=%2212%22 cy=%2212%22 r=%222%22 fill=%22%23e0502f%22/></svg>">
+<link rel="stylesheet" href="assets/style.css">
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <svg class="mark" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.3" fill="currentColor" stroke="none"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+      <span>THE PEACEKEEPERS' ARMS RACE<small>Stability–Instability Paradox, 1989–2024</small></span>
+    </a>
+    <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="data-methods.html" class="current">Data &amp; Methods</a>
+      <a href="rq1.html">RQ1 · Composition</a>
+      <a href="rq2.html">RQ2 · Lead-Lag</a>
+      <a href="rq3.html">RQ3 · Archetypes</a>
+      <a href="gallery.html">Figures</a>
+      <a href="paper.html">Full Paper</a>
+      <a href="about.html">About</a>
+    </div>
+    <a class="nav-cta" href="https://github.com/plutorion275/peacekeepers-arms-race" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+</nav>
+
+<header class="hero" style="padding:90px 0 70px;">
+  <div class="radar"><div class="radar-sweep"></div></div>
+  <div class="hero-inner">
+    <div class="kicker">Intelligence Sources</div>
+    <h1 style="font-size:clamp(32px,4.4vw,54px);">Nine datasets. Five providers. One <em>reconciled</em> panel.</h1>
+    <p class="lede">Every source is peer-reviewed and open, keyed to ISO 3166-1 alpha-3 codes for cross-source merging. Six pipeline defects were caught and corrected before any regression was run &mdash; the audit trail below is treated as part of the evidence for taking the results seriously.</p>
+  </div>
+</header>
+
+<section class="section-dark">
+  <div class="container">
+    <div class="section-head">
+      <div class="kicker">Source Register</div>
+      <h2>What each dataset contributes</h2>
+    </div>
+    <div class="source-list" style="background:var(--line);border-color:var(--line);">
+      <div class="source" style="background:var(--bg-panel);">
+        <div class="name" style="color:var(--ink);">SIPRI MILEX</div>
+        <div class="role" style="color:var(--ink-dim);">Annual military expenditure &mdash; the standard capability proxy in CoW/PRIO/RAND quantitative IR research.</div>
+        <div class="grain" style="color:var(--ink-faint);">Country-year</div>
+      </div>
+      <div class="source" style="background:var(--bg-panel);">
+        <div class="name" style="color:var(--ink);">SIPRI TIV</div>
+        <div class="role" style="color:var(--ink-dim);">Arms-transfer register, deal-level deliveries by weapon category &mdash; central to RQ2's weapon-class lead-lag test.</div>
+        <div class="grain" style="color:var(--ink-faint);">Deal → country-year</div>
+      </div>
+      <div class="source" style="background:var(--bg-panel);">
+        <div class="name" style="color:var(--ink);">UCDP ACD</div>
+        <div class="role" style="color:var(--ink-dim);">Armed Conflict Dataset &mdash; conflict type (interstate / intrastate / extrasystemic) and intensity (minor / war), primary RQ1 outcome source.</div>
+        <div class="grain" style="color:var(--ink-faint);">Conflict-year</div>
+      </div>
+      <div class="source" style="background:var(--bg-panel);">
+        <div class="name" style="color:var(--ink);">UCDP GED</div>
+        <div class="role" style="color:var(--ink-dim);">Georeferenced Event Dataset &mdash; individual dated events, giving RQ2's lead-lag test finer time resolution.</div>
+        <div class="grain" style="color:var(--ink-faint);">Event-level</div>
+      </div>
+      <div class="source" style="background:var(--bg-panel);">
+        <div class="name" style="color:var(--ink);">UCDP Dyadic</div>
+        <div class="role" style="color:var(--ink-dim);">Participant-level (side A / side B) data &mdash; builds a <em>participation</em> panel rather than a location panel, correcting the extraterritorial-attribution problem below.</div>
+        <div class="grain" style="color:var(--ink-faint);">Dyad-year</div>
+      </div>
+      <div class="source" style="background:var(--bg-panel);">
+        <div class="name" style="color:var(--ink);">UCDP BRD</div>
+        <div class="role" style="color:var(--ink-dim);">Battle-Related Deaths &mdash; per-conflict fatality estimates behind the battle-death intensity measure, the project's strongest single result.</div>
+        <div class="grain" style="color:var(--ink-faint);">Conflict-year</div>
+      </div>
+      <div class="source" style="background:var(--bg-panel);">
+        <div class="name" style="color:var(--ink);">V-Dem Core v16</div>
+        <div class="role" style="color:var(--ink-dim);">Regime-type / democracy scores &mdash; a confounder control, since democracies and autocracies show systematically different conflict patterns.</div>
+        <div class="grain" style="color:var(--ink-faint);">Country-year</div>
+      </div>
+      <div class="source" style="background:var(--bg-panel);">
+        <div class="name" style="color:var(--ink);">World Bank WDI</div>
+        <div class="role" style="color:var(--ink-dim);">GDP, GDP per capita, population &mdash; controls for country economic size.</div>
+        <div class="grain" style="color:var(--ink-faint);">Country-year</div>
+      </div>
+      <div class="source" style="background:var(--bg-panel);">
+        <div class="name" style="color:var(--ink);">CoW NMC + Alliances</div>
+        <div class="role" style="color:var(--ink-dim);">CINC benchmarks the constructed capability measure; Formal Alliances (v4.1) supports alliance-structure robustness checks.</div>
+        <div class="grain" style="color:var(--ink-faint);">State-year / dyad-year</div>
+      </div>
+    </div>
+
+    <div class="stat-strip" style="margin-top:44px;">
+      <div class="stat"><div class="num">192</div><div class="label">Countries, merged panel</div></div>
+      <div class="stat"><div class="num">6,912</div><div class="label">Country-Years, 1989&ndash;24</div></div>
+      <div class="stat"><div class="num">4,896</div><div class="label">Primary Regression N</div></div>
+      <div class="stat"><div class="num">157</div><div class="label">Countries in RQ3 Clustering</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-panel texture-grid">
+  <div class="container">
+    <div class="section-head">
+      <div class="kicker olive">Capability Proxy</div>
+      <h2>Military Technology Score &mdash; three specifications, carried in parallel</h2>
+      <p class="lede">Rather than commit to one capability proxy, three independent specifications are constructed and carried through every RQ1 regression: MILEX-only (log-normalised mean spending), TIV-only (log-normalised cumulative arms-transfer value), and a PCA composite that lets the data set relative weighting across MILEX, TIV, and selected CoW CINC subcomponents. A finding that holds across all three is reported as robust; a finding that depends on one specification is flagged as specification-dependent, not general.</p>
+    </div>
+    <div class="figure-row">
+      <figure class="plate">
+        <img src="assets/figures/nb04/fig1_mts_distributions.png" alt="Distribution of the three MTS specifications">
+        <figcaption><div class="fig-id">Fig. 04.1</div><div class="fig-cap">Distributions of the three MTS specifications: MILEX-only, TIV-only, PCA composite.</div></figcaption>
+      </figure>
+      <figure class="plate">
+        <img src="assets/figures/nb04/fig2_cinc_scatter.png" alt="MTS validated against Correlates of War CINC">
+        <figcaption><div class="fig-id">Fig. 04.2</div><div class="fig-cap">MTS validated against an independent benchmark: Correlates of War CINC.</div></figcaption>
+      </figure>
+      <figure class="plate">
+        <img src="assets/figures/nb04/fig3_mts_trajectories.png" alt="MTS trajectories over time by country">
+        <figcaption><div class="fig-id">Fig. 04.3</div><div class="fig-cap">MTS trajectories, 1989&ndash;2024, selected countries.</div></figcaption>
+      </figure>
+      <figure class="plate">
+        <img src="assets/figures/nb04/fig4_mts_correlation_matrix.png" alt="Correlation matrix across MTS specifications">
+        <figcaption><div class="fig-id">Fig. 04.4</div><div class="fig-cap">Cross-specification correlation matrix &mdash; MILEX, TIV, and PCA composite.</div></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="section-dark">
+  <div class="container">
+    <div class="two-col">
+      <div>
+        <div class="kicker steel">Panel Construction</div>
+        <h2>Participation, not location</h2>
+        <p class="lede" style="margin-top:16px;">Conflict participation is built as a <em>participant</em>-level panel from UCDP's Dyadic Dataset &mdash; which country side was fighting &mdash; rather than a <em>location</em>-level panel derived from where fighting physically occurred. A location-based approach would attribute a conflict entirely to the country on whose soil it took place, systematically missing coalition members or external supporters &mdash; understating exactly the kind of externally projected, low-footprint engagement RQ1's instability channel is theorised to produce.</p>
+        <p style="color:var(--ink-dim);">Final routing logic for a conflict's territory: intrastate/internationalised conflicts route to side A's (the defending government's) territory; bilateral interstate wars route to both parties; multi-state coalition invasions route to side B's territory, since UCDP encodes every coalition member in the same location code; extrasystemic conflicts route to the raw location field directly.</p>
+      </div>
+      <div class="hyp-list">
+        <div class="hyp" style="grid-template-columns:1fr;">
+          <div class="txt"><b>USA / GBR / AUS</b>, Iraq War 2003 (multi-state coalition) &mdash; correctly flagged extraterritorial after the fix.</div>
+        </div>
+        <div class="hyp" style="grid-template-columns:1fr;">
+          <div class="txt"><b>Russia</b>, Syria intervention 2015 &mdash; correctly flagged extraterritorial.</div>
+        </div>
+        <div class="hyp" style="grid-template-columns:1fr;">
+          <div class="txt"><b>India</b>, Kargil 1999 &mdash; correctly flagged <em>not</em> extraterritorial (fighting on contested but own-claimed territory).</div>
+        </div>
+        <div class="hyp" style="grid-template-columns:1fr;">
+          <div class="txt">Net effect: total extraterritorial participant-years rose from 4,270 (naive text parse) to <b>4,720</b> (+450) under the corrected routing.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-paper texture-grid on-paper">
+  <div class="container">
+    <div class="section-head">
+      <div class="kicker">After-Action Report</div>
+      <h2>Six pipeline defects, caught before they reached a regression</h2>
+      <p class="lede">Each is logged here in full because catching it is itself part of the evidence for the reliability of the results that follow &mdash; not because the details matter to the substantive argument.</p>
+    </div>
+    <div class="incident" style="background:var(--paper-2);border-color:var(--line-dark);">
+      <div class="tag">Incident 01 &middot; Entity Resolution</div>
+      <p>A fuzzy country-name matcher initially resolved "Islamic State" to <b>Iceland</b> (ISO3 = ISL), inflating Iceland's apparent conflict count. Fixed with a dedicated resolver carrying per-dataset override rules.</p>
+    </div>
+    <div class="incident" style="background:var(--paper-2);border-color:var(--line-dark);">
+      <div class="tag">Incident 02 &middot; Source Query Defect</div>
+      <p>SIPRI's arms-transfer portal was found, via manual audit against SIPRI's own published totals, to silently return <b>export</b> totals instead of import totals regardless of the UI selection &mdash; which would have inverted the capability proxy for every exporting country if left uncaught.</p>
+    </div>
+    <div class="incident" style="background:var(--paper-2);border-color:var(--line-dark);">
+      <div class="tag">Incident 03 &middot; Coalition Undercounting</div>
+      <p>UCDP's dyadic data fold multi-state coalitions into a single location code, systematically undercounting coalition members as extraterritorial participants &mdash; caught via a spot-check on the 2003 Iraq War, exactly the outcome RQ1 tests.</p>
+    </div>
+    <div class="incident" style="background:var(--paper-2);border-color:var(--line-dark);">
+      <div class="tag">Incident 04 &middot; Successor-State Aggregation</div>
+      <p>Historical-state variables (USSR, Yugoslavia, Czechoslovakia) were initially aggregated across successor states by <b>arithmetic mean</b> instead of sum &mdash; silently halving expenditure and population figures for any country touched by a split.</p>
+    </div>
+    <div class="incident" style="background:var(--paper-2);border-color:var(--line-dark);">
+      <div class="tag">Incident 05 &middot; Zero vs. Missing</div>
+      <p>The TIV series used a literal zero for both "no data reported" and "genuinely zero imports," biasing roughly <b>5,400 country-years</b> toward the bottom of the capability scale until the two were disambiguated.</p>
+    </div>
+    <div class="incident" style="background:var(--paper-2);border-color:var(--line-dark);">
+      <div class="tag">Incident 06 &middot; Stale Robustness Flag</div>
+      <p>A downstream RQ2 robustness flag was computed in memory <em>after</em> its results table had already been written to disk &mdash; the saved file never reflected it. Caught only by a later notebook's attempt to re-read the saved file, which is why every result below is cross-checked against actual saved output, not trusted from memory.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section-dark">
+  <div class="container">
+    <div class="section-head">
+      <div class="kicker amber">Key Methodological Choices</div>
+      <h2>Four decisions the results depend on</h2>
+    </div>
+    <div class="grid-2">
+      <div class="card" style="cursor:default;">
+        <div class="tag">Capability Proxy</div>
+        <h3>PCA-composite as primary spec</h3>
+        <p>The primary specification (<code>mts_pca_3feat</code>) drops CoW's <code>milper</code> to extend coverage to 2024, since CINC itself truncates at 2016.</p>
+      </div>
+      <div class="card" style="cursor:default;">
+        <div class="tag">RQ2 Null Model</div>
+        <h3>Circular-shift replaces shuffle</h3>
+        <p>A circular-shift null is used in place of the conventional shuffle null, since shuffling destroys the negative serial structure inherent to arms-transfer time series &mdash; see the full case file on RQ2.</p>
+      </div>
+      <div class="card" style="cursor:default;">
+        <div class="tag">Panel Balance</div>
+        <h3>Balanced grid, NaN-tolerant estimators</h3>
+        <p>A balanced (iso3 &times; year) grid is used with NaN-tolerant estimators, rather than truncating the sample to the shortest-covered source.</p>
+      </div>
+      <div class="card" style="cursor:default;">
+        <div class="tag">Cluster Stability</div>
+        <h3>0.50 threshold, not 0.75</h3>
+        <p>Recalibrated to reflect the theoretical stability ceiling for bootstrap-with-replacement resampling at n=157 (Ben-Hur et al. 2002), not the 0.75 convention built for cross-validation resampling.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="footer-placeholder"></footer>
+<script src="assets/script.js"></script>
+<script src="assets/footer.js"></script>

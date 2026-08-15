@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About &amp; Reproducibility</title>
+<meta name="description" content="Reproducibility notes, citation, license, and AI-use disclosure for The Peacekeepers' Arms Race.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22><rect width=%2224%22 height=%2224%22 rx=%225%22 fill=%22%2312140e%22/><circle cx=%2212%22 cy=%2212%22 r=%227%22 fill=%22none%22 stroke=%22%23e0502f%22 stroke-width=%222%22/><circle cx=%2212%22 cy=%2212%22 r=%222%22 fill=%22%23e0502f%22/></svg>">
+<link rel="stylesheet" href="assets/style.css">
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <svg class="mark" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.3" fill="currentColor" stroke="none"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+      <span>THE PEACEKEEPERS' ARMS RACE<small>Stability–Instability Paradox, 1989–2024</small></span>
+    </a>
+    <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="data-methods.html">Data &amp; Methods</a>
+      <a href="rq1.html">RQ1 · Composition</a>
+      <a href="rq2.html">RQ2 · Lead-Lag</a>
+      <a href="rq3.html">RQ3 · Archetypes</a>
+      <a href="gallery.html">Figures</a>
+      <a href="paper.html">Full Paper</a>
+      <a href="about.html" class="current">About</a>
+    </div>
+    <a class="nav-cta" href="https://github.com/plutorion275/peacekeepers-arms-race" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+</nav>
+
+<header class="hero" style="padding:90px 0 60px;">
+  <div class="radar"><div class="radar-sweep"></div></div>
+  <div class="hero-inner">
+    <div class="kicker">About This Project</div>
+    <h1 style="font-size:clamp(32px,4.4vw,52px);">Reproducibility, provenance, and the AI-use disclosure.</h1>
+    <p class="lede">Originally coursework for PMDS507L (Big Data Analytics), now on a journal-submission track. Every table and figure on this site traces to a saved output in the repository below.</p>
+  </div>
+</header>
+
+<section class="section-dark">
+  <div class="container">
+    <div class="grid-2">
+      <div class="card" style="cursor:default;">
+        <div class="tag">Reproduce It</div>
+        <h3>Run the pipeline yourself</h3>
+        <p style="margin-top:14px;">Clone the repo, create a virtual environment, install requirements, follow <code>data/README.md</code> to download raw sources (SIPRI, UCDP, World Bank, V-Dem, CoW) into <code>data/raw/</code>, then run notebooks 00&rarr;14 in numeric order. Each notebook consumes the previous notebook's Parquet checkpoint and is independently re-runnable.</p>
+        <div style="margin-top:20px;font-family:var(--mono);font-size:12.5px;color:var(--ink-dim);background:var(--bg-panel-2);border:1px solid var(--line);border-radius:8px;padding:14px 16px;">
+          git clone github.com/plutorion275/peacekeepers-arms-race<br>
+          python -m venv .venv &amp;&amp; pip install -r requirements.txt<br>
+          jupyter nbconvert --to notebook --execute notebooks/*.ipynb
+        </div>
+      </div>
+      <div class="card" style="cursor:default;">
+        <div class="tag">Cite It</div>
+        <h3>Archived DOI + active repository</h3>
+        <p style="margin-top:14px;">Cite the archived Zenodo snapshot as the primary reference for reproducing exactly the results reported here. The GitHub repository is where post-v1.0.0 updates land.</p>
+        <div style="margin-top:20px;font-family:var(--mono);font-size:11.5px;line-height:1.7;color:var(--ink-dim);background:var(--bg-panel-2);border:1px solid var(--line);border-radius:8px;padding:14px 16px;">
+          Davis, T. S. (2026). The Peacekeepers' Arms Race:<br>
+          Testing the Stability-Instability Paradox in<br>
+          Cross-National Conflict Data, 1946-2024 (v1.0.0)<br>
+          [Data set and software]. Zenodo.<br>
+          doi.org/10.5281/zenodo.21947819
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-panel texture-grid">
+  <div class="container">
+    <div class="section-head">
+      <div class="kicker">Repository Layout</div>
+      <h2>What's where</h2>
+    </div>
+    <div class="tbl-wrap">
+      <table class="data">
+        <thead><tr><th>Path</th><th>Contents</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">data/</td><td>README with source links/licenses; <code>raw/</code>, <code>checkpoints/</code>, <code>clean/</code> (gitignored, not redistributed)</td></tr>
+          <tr><td class="mono">notebooks/</td><td>00&ndash;14, numbered for execution order, each independently re-runnable via <code>jupyter nbconvert --execute</code></td></tr>
+          <tr><td class="mono">src/</td><td>Shared modules imported by all notebooks: <code>config</code>, <code>iso3</code>, <code>io_utils</code>, <code>panels</code>, <code>mts</code>, <code>alliances</code>, <code>rq2_panel</code>, <code>stats_panel</code>, <code>viz</code></td></tr>
+          <tr><td class="mono">figures/</td><td>Generated plots, one subfolder per notebook &mdash; committed, browsable without re-running anything</td></tr>
+          <tr><td class="mono">tables/</td><td>Regression/output tables as CSV, one subfolder per notebook &mdash; committed</td></tr>
+          <tr><td class="mono">reports/</td><td>Paper draft (<code>draft.md</code> / <code>draft.pdf</code>), citation map</td></tr>
+          <tr><td class="mono">scripts/</td><td><code>check_notebooks.py</code>, <code>verify_nb06.py</code>, <code>make_eda_notebook.py</code></td></tr>
+          <tr><td class="mono">docs/</td><td>This site</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section-dark">
+  <div class="container">
+    <div class="two-col">
+      <div>
+        <div class="kicker amber">AI-Use Disclosure</div>
+        <h2>Disclosed in full, not minimized</h2>
+        <p class="lede" style="margin-top:16px;">Generative AI tools (Claude, Anthropic) were used extensively throughout this project's development: generating implementation code for all analysis notebooks from author-specified requirements; conducting statistical audits of intermediate results, including diagnosing and correcting the miscalibrated significance test underlying the RQ2 findings; reviewing data-quality issues in the pipeline; and drafting substantial portions of the manuscript prose from the author's specifications and the project's saved analytical outputs.</p>
+        <p style="color:var(--ink-dim);font-size:14.5px;">Every AI-assisted output &mdash; code, statistical claim, and manuscript text alike &mdash; was directed, reviewed, and checked against the underlying data by the author before inclusion. Every numerical claim in the manuscript traces to a specific saved result rather than to AI-generated text taken on faith. The research questions, methodological judgment calls, interpretation of results, and conclusions are the author's own.</p>
+      </div>
+      <div class="hyp-list">
+        <div class="hyp" style="grid-template-columns:1fr;"><div class="txt"><b>Author:</b> T Sam Davis &mdash; conceived the research question, designed the study, directed all analytical decisions, responsible for final interpretation.</div></div>
+        <div class="hyp" style="grid-template-columns:1fr;"><div class="txt"><b>Funding:</b> None. Originated as coursework for PMDS507L (Big Data Analytics).</div></div>
+        <div class="hyp" style="grid-template-columns:1fr;"><div class="txt"><b>Conflict of interest:</b> None declared.</div></div>
+        <div class="hyp" style="grid-template-columns:1fr;"><div class="txt"><b>License:</b> Code released under MIT. Third-party data retains each provider's own license terms.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-paper texture-grid on-paper">
+  <div class="container">
+    <div class="section-head">
+      <div class="kicker">Reproducibility Notes</div>
+      <h2>Built to be checked, not just trusted</h2>
+    </div>
+    <div class="grid-3">
+      <div class="card" style="background:var(--paper-2);border-color:var(--line-dark);cursor:default;">
+        <div class="tag" style="color:#5f6e33;">Parquet, Not Pickle</div>
+        <h3 class="on-paper" style="color:var(--ink-dark);">Cross-version safe handoffs</h3>
+        <p class="on-paper" style="color:var(--ink-dark-dim);">Inter-notebook handoffs use Parquet, not Pickle, to avoid breakage across pandas versions.</p>
+      </div>
+      <div class="card" style="background:var(--paper-2);border-color:var(--line-dark);cursor:default;">
+        <div class="tag" style="color:#5f6e33;">Guard Cells</div>
+        <h3 class="on-paper" style="color:var(--ink-dark);">PASS/FAIL sanity checks</h3>
+        <p class="on-paper" style="color:var(--ink-dark-dim);">Each notebook contains PASS/FAIL sanity-check cells and, where relevant, a regression guard against frozen reference values.</p>
+      </div>
+      <div class="card" style="background:var(--paper-2);border-color:var(--line-dark);cursor:default;">
+        <div class="tag" style="color:#5f6e33;">Custom DH Test</div>
+        <h3 class="on-paper" style="color:var(--ink-dark);">60+ min &rarr; 1&ndash;2 min</h3>
+        <p class="on-paper" style="color:var(--ink-dark-dim);">A numpy-based Dumitrescu-Hurlin implementation is used where no maintained Python package exists, cutting runtime dramatically versus a naive approach.</p>
+      </div>
+    </div>
+    <div class="hero-actions" style="margin-top:44px;">
+      <a class="btn btn-outline" href="https://github.com/plutorion275/peacekeepers-arms-race" target="_blank" rel="noopener">View Source on GitHub ↗</a>
+      <a class="btn btn-outline" href="https://doi.org/10.5281/zenodo.21947818" target="_blank" rel="noopener">Zenodo Archive ↗</a>
+    </div>
+  </div>
+</section>
+
+<footer id="footer-placeholder"></footer>
+<script src="assets/script.js"></script>
+<script src="assets/footer.js"></script>

@@ -11,7 +11,7 @@ identifiers:
   - type: doi
     value: 10.5281/zenodo.21947819
     description: "Archived snapshot of version v1.0.0, the version this identifier covers. The record's concept DOI (10.5281/zenodo.21947818) always resolves to the latest version."
-version: v1.0.0
+version: v1.0.1
 abstract: >-
   A quantitative panel-data study testing the Stability-Instability
   Paradox across 192 countries (1946-2024): whether higher military

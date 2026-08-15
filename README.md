@@ -3,12 +3,29 @@
 **Testing the Stability–Instability Paradox with cross-national panel data, 1946–2024**
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21947818.svg)](https://doi.org/10.5281/zenodo.21947818)
+[![License: MIT](https://img.shields.io/badge/License-MIT-informational.svg)](LICENSE)
+[![Website](https://img.shields.io/badge/site-live-bd3a26.svg)](https://plutorion275.github.io/peacekeepers-arms-race/)
 
 A quantitative panel-data study asking whether higher military capability shifts conflict composition toward low-intensity forms (the *substitution hypothesis*) or amplifies all conflict types (*amplification*). Originally a course project for PMDS507L (Big Data Analytics), now on a journal-submission track.
 
 **Author:** T Sam Davis
 
 ---
+
+## Website
+
+**[plutorion275.github.io/peacekeepers-arms-race →](https://plutorion275.github.io/peacekeepers-arms-race/)**
+
+Every hypothesis, regression table, and all 51 committed figures are browsable there without cloning the repo or running a single notebook — a landing page, a Data & Methods page, one page per research question, a filterable figures gallery, the full manuscript, and a reproducibility/about page.
+
+| | |
+|---|---|
+| ![Landing page](docs/assets/screenshots/home.png) | ![RQ2 case-file narrative](docs/assets/screenshots/rq2.png) |
+| **Landing page** — headline stats and the three RQ summary cards | **RQ2 case file** — the five-stage audit trail from a naive 8/12 result to a corrected 0/12 |
+| ![RQ3 archetype cards](docs/assets/screenshots/rq3.png) | ![Figures gallery](docs/assets/screenshots/gallery.png) |
+| **RQ3 archetypes** — cluster profiles with real centroid statistics and stability verdicts | **Figures gallery** — all 51 figures, filterable by notebook |
+
+Source lives in [`docs/`](docs/); see [`CHANGELOG.md`](CHANGELOG.md) for what shipped in each release.
 
 ## Research questions
 
@@ -24,7 +41,7 @@ A quantitative panel-data study asking whether higher military capability shifts
 - **RQ2:** The standard Dumitrescu-Hurlin shuffle-null test is mis-specified for these panels (destroys negative serial structure in arms-transfer data → inflated type-I error, 0.32–0.48 against a 5% nominal rate). Under the correct circular-shift null, only 1 of 8 nominally significant cells survives per-cell permutation, and none survive BH correction.
 - **RQ3:** Four archetypes identified — Defensive Deterrent, Safe Hegemon, Inert Non-Combatant, Armed Instabilizer — with out-of-sample ANOVA validating predictive power (F=33.575, p<0.0001). Bootstrap Jaccard stability is below the conventional 0.75 threshold, but that threshold is miscalibrated for bootstrap-with-replacement at n=157 (theoretical ceiling ≈0.53 per Ben-Hur et al. 2002); against the correct 0.50 threshold, clusters are stable.
 
-Full detail and diagnostics live in `tables/` (per-notebook CSVs) and `figures/` (per-notebook plots); the paper writeup itself is being drafted in `reports/`.
+Full detail and diagnostics live in `tables/` (per-notebook CSVs) and `figures/` (per-notebook plots); the paper writeup itself is in `reports/`, and the [website](https://plutorion275.github.io/peacekeepers-arms-race/) walks through all of it interactively.
 
 ## Data sources
 
@@ -82,9 +99,14 @@ peacekeepers-arms-race/
 ├── figures/                 # Generated plots, one subfolder per notebook (committed)
 ├── tables/                  # Regression/output tables as CSV, one subfolder per notebook (committed)
 ├── reports/                 # Paper drafts / writeups (in progress)
+├── docs/                    # Project website (GitHub Pages) — see "Website" above
+│   ├── index.html, rq1.html, rq2.html, rq3.html, data-methods.html,
+│   │   gallery.html, paper.html, about.html
+│   └── assets/              # style.css, script.js, figures/ (mirrored), screenshots/
 ├── requirements.txt
 ├── LICENSE
 ├── CITATION.cff
+├── CHANGELOG.md
 └── README.md
 ```
 
@@ -111,6 +133,8 @@ Tested against Python 3.14 (see `.python-version`). Run `pytest tests/` to valid
 
 Then follow `data/README.md` to download raw source files (SIPRI, UCDP, World Bank, V-Dem, CoW) into `data/raw/`, and run notebooks 00→14 in order.
 
+To preview the website locally instead: `python -m http.server 8080 --directory docs`, then open `http://localhost:8080`.
+
 ## Key methodological choices
 
 - **MTS construction:** the primary specification (`mts_pca_3feat`) is a three-feature PCA that drops CoW `milper` to extend coverage to 2024 (CoW CINC itself truncates at 2016).
@@ -130,7 +154,7 @@ Code in this repository is released under the [MIT License](LICENSE). Third-part
 
 ## Citation
 
-If you use this code or findings, please cite the archived DOI as the primary reference (see also `CITATION.cff`):
+If you use this code or findings, please cite the archived DOI as the primary reference (see also `CITATION.cff`); the DOI badge above always resolves to the latest archived version:
 
 ```
 Davis, T. S. (2026). The Peacekeepers' Arms Race: Testing the Stability-Instability
@@ -138,4 +162,4 @@ Paradox in Cross-National Conflict Data, 1946-2024 (v1.0.0) [Data set and softwa
 Zenodo. https://doi.org/10.5281/zenodo.21947819
 ```
 
-For the actively maintained working code (post-v1.0.0 updates), see the GitHub repository: https://github.com/plutorion275/peacekeepers-arms-race
+For the actively maintained working code (post-v1.0.0 updates, including this project's website), see the GitHub repository: https://github.com/plutorion275/peacekeepers-arms-race — and [`CHANGELOG.md`](CHANGELOG.md) for what changed in each release.

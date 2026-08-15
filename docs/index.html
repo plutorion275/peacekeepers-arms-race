@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Peacekeepers' Arms Race</title>
+<meta name="description" content="A panel-data study testing whether military capability shifts conflict composition (substitution) or amplifies all conflict types — across 192 countries, 1989–2024.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22><rect width=%2224%22 height=%2224%22 rx=%225%22 fill=%22%2312140e%22/><circle cx=%2212%22 cy=%2212%22 r=%227%22 fill=%22none%22 stroke=%22%23e0502f%22 stroke-width=%222%22/><circle cx=%2212%22 cy=%2212%22 r=%222%22 fill=%22%23e0502f%22/></svg>">
+<link rel="stylesheet" href="assets/style.css">
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <svg class="mark" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.3" fill="currentColor" stroke="none"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+      <span>THE PEACEKEEPERS' ARMS RACE<small>Stability–Instability Paradox, 1989–2024</small></span>
+    </a>
+    <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div class="nav-links">
+      <a href="index.html" class="current">Home</a>
+      <a href="data-methods.html">Data &amp; Methods</a>
+      <a href="rq1.html">RQ1 · Composition</a>
+      <a href="rq2.html">RQ2 · Lead-Lag</a>
+      <a href="rq3.html">RQ3 · Archetypes</a>
+      <a href="gallery.html">Figures</a>
+      <a href="paper.html">Full Paper</a>
+      <a href="about.html">About</a>
+    </div>
+    <a class="nav-cta" href="https://github.com/plutorion275/peacekeepers-arms-race" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="radar"><div class="radar-sweep"></div></div>
+  <div class="hero-inner">
+    <div class="kicker">Field Brief · PMDS507L Big Data Analytics · 192 Countries, 1989&ndash;2024</div>
+    <h1>Does building better weapons buy <em>peace</em> — or just change what <em>war</em> looks like?</h1>
+    <p class="lede">A quantitative panel-data study testing the stability&ndash;instability paradox on the conventional precision-strike era: does higher military capability shift conflict composition toward low-intensity forms, or amplify all conflict types at once? Nine datasets, five providers, three research questions, one central methodological correction.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="rq1.html">Read the Findings
+        <svg class="icon" style="width:15px;height:15px" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a class="btn btn-outline" href="paper.html">Read the Full Paper</a>
+    </div>
+  </div>
+</header>
+
+<section class="section-dark texture-grid">
+  <div class="container">
+    <div class="stat-strip">
+      <div class="stat"><div class="num">192</div><div class="label">Countries Covered</div></div>
+      <div class="stat"><div class="num">1989&ndash;24</div><div class="label">Analysis Window</div></div>
+      <div class="stat"><div class="num">9</div><div class="label">Datasets, 5 Providers</div></div>
+      <div class="stat"><div class="num">β 2.03</div><div class="label">Capability → Battle Deaths</div></div>
+      <div class="stat"><div class="num">0 / 12</div><div class="label">Lead&ndash;Lag Cells Survive</div></div>
+      <div class="stat"><div class="num">4</div><div class="label">Conflict Archetypes</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-dark">
+  <div class="container">
+    <div class="section-head">
+      <div class="kicker">Abstract</div>
+      <h2>Amplification, not substitution &mdash; and a test that lied about its own confidence.</h2>
+      <p class="lede">This project tests whether the stability&ndash;instability paradox &mdash; developed for nuclear deterrence &mdash; generalises to conventional precision-strike capability: guided munitions, combat drones, and networked targeting. A 192-country panel triangulates SIPRI, UCDP, V-Dem, World Bank, and Correlates of War data to ask three linked questions about composition, mechanism, and structure.</p>
+    </div>
+
+    <div class="grid-3">
+      <a href="rq1.html" class="card rq1">
+        <div class="tag">RQ1 &middot; Composition</div>
+        <h3>Capability predicts more of everything &mdash; especially lethality</h3>
+        <p>Two-way fixed-effects panel regression finds no substitution: higher capability is tied to significantly <em>more</em> war and minor-conflict participation, and most strongly to deadlier conflict once it occurs (&beta;=2.03, p&lt;.001).</p>
+        <div class="verdict">Not Supported as Hypothesized</div>
+        <div class="go">View the regression <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      </a>
+      <a href="rq2.html" class="card rq2">
+        <div class="tag">RQ2 &middot; Lead-Lag</div>
+        <h3>A textbook test was miscalibrated &mdash; and its "signal" evaporates</h3>
+        <p>The standard Dumitrescu&ndash;Hurlin test nominally flags 8 of 12 weapon&rarr;conflict cells. Under a corrected circular-shift null with FDR correction, zero survive &mdash; confirmed independently by an out-of-sample forecasting benchmark.</p>
+        <div class="verdict">Null Result, Falsification-Tested</div>
+        <div class="go">Read the case file <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      </a>
+      <a href="rq3.html" class="card rq3">
+        <div class="tag">RQ3 &middot; Archetypes</div>
+        <h3>Four conflict-capability archetypes, half provably stable</h3>
+        <p>K-Means clustering (n=610 country-epochs) recovers four archetypes that predict future conflict out-of-sample (F=33.6, p&lt;.001) &mdash; but only 2 of 4 clear a correctly calibrated bootstrap-stability threshold.</p>
+        <div class="verdict">Predictive, Partially Stable</div>
+        <div class="go">See the clusters <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="section-paper texture-grid on-paper">
+  <div class="container">
+    <div class="two-col">
+      <div>
+        <div class="kicker">Synthesis</div>
+        <h2>Every strong first-pass claim needed qualification &mdash; and got sharper for it.</h2>
+        <p class="lede" style="margin-top:16px;">Read across all three research questions, a single thread connects results that on the surface look unrelated: nearly every claim this project could have made on a first pass turned out to need correction once tested properly &mdash; and in every case the correction made the finding more precise, not weaker.</p>
+        <div class="hero-actions" style="margin-top:32px;">
+          <a class="btn btn-outline" href="gallery.html">Browse All 54 Figures</a>
+        </div>
+      </div>
+      <figure class="plate">
+        <img src="assets/figures/nb08/fig7_synthesis_scorecard.png" alt="Synthesis scorecard summarizing RQ1, RQ2, and RQ3 verdicts">
+        <figcaption>
+          <div class="fig-id">Fig. 08.7</div>
+          <div class="fig-cap">Synthesis scorecard &mdash; the naive-vs-rigorous verdict, side by side, for all three research questions.</div>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="section-dark">
+  <div class="container">
+    <div class="section-head">
+      <div class="kicker">Data Spine</div>
+      <h2>Five providers, triangulated to one ISO3-standardised panel</h2>
+    </div>
+    <div class="figure-row cols-3">
+      <figure class="plate">
+        <img src="assets/figures/nb08/fig3_choropleth_mts.png" alt="World choropleth of Military Technology Score">
+        <figcaption><div class="fig-id">Fig. 08.3</div><div class="fig-cap">Military Technology Score by country, PCA composite specification.</div></figcaption>
+      </figure>
+      <figure class="plate">
+        <img src="assets/figures/nb08/fig4_choropleth_war_minor.png" alt="World choropleth of war-to-minor conflict ratio">
+        <figcaption><div class="fig-id">Fig. 08.4</div><div class="fig-cap">War-to-minor conflict participation ratio by country.</div></figcaption>
+      </figure>
+      <figure class="plate">
+        <img src="assets/figures/nb09/fig1_stability_vs_validity.png" alt="Stability versus out-of-sample validity plot for RQ3 archetypes">
+        <figcaption><div class="fig-id">Fig. 09.1</div><div class="fig-cap">RQ3 archetypes: bootstrap stability vs. out-of-sample predictive validity.</div></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<footer id="footer-placeholder"></footer>
+<div class="lightbox" id="lightbox"><span class="lb-close">CLOSE ✕</span><img src="" alt=""><div class="lb-cap"></div></div>
+<script src="assets/script.js"></script>
+<script src="assets/footer.js"></script>
